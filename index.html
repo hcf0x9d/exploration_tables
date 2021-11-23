@@ -155,7 +155,7 @@
             {
                 data: {
                     name: "Maroon Iron Chow Chow",
-                    created_by: "John Medeski",
+                    creator: "John Medeski",
                     id: "10",
                     status: "Completed",
                     next_transfer: "30 Oct 2021 11:25",
@@ -168,7 +168,7 @@
             {
                 data: {
                     name: "Aqua Gold Sheepdog",
-                    created_by: "Billy Martin",
+                    creator: "Billy Martin",
                     id: "09",
                     status: "Error",
                     next_transfer: "29 Oct 2021 15:30",
@@ -181,7 +181,7 @@
             {
                 data: {
                     name: "Aqua Zinc Cocker Spaniel",
-                    created_by: "Chris Wood",
+                    creator: "Chris Wood",
                     id: "08",
                     status: "Completed",
                     next_transfer: "12 Oct 2021 16:42",
@@ -194,7 +194,7 @@
             {
                 data: {
                     name: "Silver Copper Spaniel",
-                    created_by: "Chris Wood",
+                    creator: "Chris Wood",
                     id: "07",
                     status: "Ready",
                     next_transfer: "11 Oct 2021 09:03",
@@ -207,7 +207,7 @@
             {
                 data: {
                     name: "Fuschia Silver Corgi",
-                    created_by: "John Medeski",
+                    creator: "John Medeski",
                     id: "06",
                     status: "Configuring",
                     next_transfer: "09 Oct 2021 16:21",
@@ -220,7 +220,7 @@
             {
                 data: {
                     name: "Gray Tin Pomeranian",
-                    created_by: "John Medeski",
+                    creator: "John Medeski",
                     id: "05",
                     status: "Completed",
                     next_transfer: "04 Oct 2021 10:15",
@@ -233,7 +233,7 @@
             {
                 data: {
                     name: "Bitter Volunteer",
-                    created_by: "Billy Martin",
+                    creator: "Billy Martin",
                     id: "04",
                     status: "Ready",
                     next_transfer: "04 Oct 2021 09:55",
@@ -246,7 +246,7 @@
             {
                 data: {
                     name: "Eager Pirate",
-                    created_by: "John Medeski",
+                    creator: "John Medeski",
                     id: "03",
                     status: "Completed",
                     next_transfer: "02 Oct 2021 11:56",
@@ -259,7 +259,7 @@
             {
                 data: {
                     name: "Tinted Mamba",
-                    created_by: "Chris Wood",
+                    creator: "Chris Wood",
                     id: "02",
                     status: "Completed",
                     next_transfer: "01 Oct 2021 12:12",
@@ -272,7 +272,7 @@
             {
                 data: {
                     name: "Major Dragonfly",
-                    created_by: "Chris Wood",
+                    creator: "Chris Wood",
                     id: "01",
                     status: "Ready",
                     next_transfer: "01 Oct 2021 15:30",
@@ -304,20 +304,90 @@
 
         if ( type === 'number' ) {
 
+            overlayInner.innerHTML = `
+                <div>
+                    <small class="mb-2 block">This doesn't actually work, it's just for illustration.</small>
+                  <div>
+                      <input type="radio" id="huey" name="next_date_option" value="date" checked>
+                      <label for="huey">Exactly</label>
+                  </div>
+                  <div class="block pl-3 pt-2 pb-2 js-date-single">
+                    <input class="w-full p-1 border border-solid border-gray-200 text-gray-800 rounded block" type="text" value="">
+                  </div>
+                </div>
+
+                <div>
+                  <div>
+                      <input type="radio" id="dewey" name="next_date_option" value="between">
+                      <label for="dewey">Contains</label>
+                  </div>
+                  <div class="block pl-3 pt-2 pb-2 js-date-multi hidden">
+                    <input class="w-full p-1 border border-solid border-gray-200 text-gray-800 rounded block" type="text" value="">
+                  </div>
+                </div>`;
+
         } else if ( type === 'text' ) {
+            if ( column === 'id' ) {
+                column = 'ID';
+            }
+            overlayInner.innerHTML = `
+                <div>
+                    <small class="mb-2 block">This doesn't actually work, it's just for illustration.</small>
+                  <div>
+                      <input type="radio" id="huey" name="next_date_option" value="date" checked>
+                      <label for="huey">Exactly</label>
+                  </div>
+                  <div class="block pl-3 pt-2 pb-2 js-date-single">
+                    <input class="w-full p-1 border border-solid border-gray-200 text-gray-800 rounded block" type="text" value="">
+                  </div>
+                </div>
+
+                <div>
+                  <div>
+                      <input type="radio" id="dewey" name="next_date_option" value="between">
+                      <label for="dewey">Contains</label>
+                  </div>
+                  <div class="block pl-3 pt-2 pb-2 js-date-multi hidden">
+                    <input class="w-full p-1 border border-solid border-gray-200 text-gray-800 rounded block" type="text" value="">
+                  </div>
+                </div>`;
 
         } else if ( type === 'select' ) {
             let options = '<option>Select an option</option>'
             data.forEach( ( item ) => {
                 options += `<option value="${item}">${item}</option>`;
             })
-            console.log(column.toLowerCase().split(" ").join("_"))
+
             overlayInner.innerHTML = `<select class="w-full border border-solid border-gray-200 text-gray-800 rounded" name="${column.toLowerCase().split(" ").join("_")}" id="${column.toLowerCase().split(" ").join("_")}">${options}</select>`
         } else if ( type === 'date' ) {
+            overlayInner.innerHTML = `
+                <div>
+                    <small class="mb-2 block">This doesn't actually work, it's just for illustration.</small>
+                  <div>
+                      <input type="radio" id="huey" name="next_date_option" value="date" checked>
+                      <label for="dewey">Date of transfer</label>
+                  </div>
+                  <div class="block pl-3 pt-2 pb-2 js-date-single">
+                    <input class="w-full p-1 border border-solid border-gray-200 text-gray-800 rounded block" type="date" id="start" name="trip-start" value="">
+                  </div>
+                </div>
 
+                <div>
+                  <div>
+                      <input type="radio" id="dewey" name="next_date_option" value="between">
+                      <label for="dewey">Between dates</label>
+                  </div>
+                  <div class="block pl-3 pt-2 pb-2 js-date-multi hidden">
+                    <label for="">Start</label>
+                    <input class="w-full p-1 border border-solid border-gray-200 text-gray-800 rounded block" type="date" id="start" name="trip-start" value="">
+                    <label for="" class="pt-3 block">End</label>
+                    <input class="w-full p-1 border border-solid border-gray-200 text-gray-800 rounded block" type="date" id="start" name="trip-start" value="">
+                  </div>
+
+                </div>`;
         }
 
-        overlayHeader.innerHTML = `<h3>${column}</h3>`
+        overlayHeader.innerHTML = `<h3 class="capitalize">Filter by ${column}</h3>`
         overlayFooter.innerHTML = `
             <button class="js-cancel inline-flex items-center border border-transparent disabled:opacity-50 px-3 py-2 text-sm leading-4 font-medium rounded-md shadow-sm text-purple-600 bg-gray-50 hover:bg-gray-200">Cancel</button>
             <button class="js-filter inline-flex items-center border border-transparent disabled:opacity-50 px-3 py-2 text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-800">Add Filter</button>
@@ -325,6 +395,18 @@
         overlay.appendChild(overlayHeader);
         overlay.appendChild(overlayInner);
         overlay.appendChild(overlayFooter);
+
+        overlay.querySelectorAll( 'input[name="next_date_option"]' ).forEach( ( opt ) => {
+            opt.addEventListener( 'click', () => {
+                if ( opt.value === 'between' ) {
+                    overlay.querySelector( '.js-date-single').classList.add( 'hidden' )
+                    overlay.querySelector( '.js-date-multi').classList.remove( 'hidden' )
+                } else {
+                    overlay.querySelector( '.js-date-single').classList.remove( 'hidden' )
+                    overlay.querySelector( '.js-date-multi').classList.add( 'hidden' )
+                }
+            } );
+        } );
 
         return overlay;
     }
@@ -338,13 +420,14 @@
             this.buildTableHeaders();
             this.buildTable();
             this.searchData();
+
         }
 
         // Sort the columns
         sortData( column, direction ) {
             let columnSlug = column.split(" ").join("_").toLowerCase()
             const sorter = ( type, direction ) => {
-                console.log(type, direction)
+
                 this.data.data.sort( function ( a, b ) {
 
                     if ( type === 'string' ) {
@@ -409,21 +492,24 @@
 
         filterData( column, cell ) {
             let popup;
+            let runFilter;
 
             if ( column.toLowerCase() === 'name / created by' ) {
                 let people = [];
 
                 this.data.data.forEach( ( row ) => {
 
-                    if ( !people.includes( row.data.created_by ) ) {
-                        people.push( row.data.created_by );
+                    if ( !people.includes( row.data.creator ) ) {
+                        people.push( row.data.creator );
                     }
                 } );
 
-                popup = filterOverlay( 'select', 'Created By', people.sort() )
+                popup = filterOverlay( 'select', 'Creator', people.sort() )
+                runFilter = true;
 
             } else if ( column.toLowerCase() === 'id' ) {
-                console.log('filter by ID')
+                popup = filterOverlay( 'text', 'id', [])
+                runFilter = false;
             } else if ( column.toLowerCase() === 'status' ) {
                 let statuses = [];
                 this.data.data.forEach( ( row ) => {
@@ -432,13 +518,16 @@
                     }
                 } );
                 popup = filterOverlay( 'select', 'Status', statuses.sort() )
-
+                runFilter = true;
             } else if ( column.toLowerCase() === 'next transfer' ) {
-
+                popup = filterOverlay( 'date', 'next transfer', [])
+                runFilter = false;
             } else if ( column.toLowerCase() === 'last transfer' ) {
-
+                popup = filterOverlay( 'date', 'next transfer', [])
+                runFilter = false;
             } else if ( column.toLowerCase() === 'count transfer' ) {
-
+                popup = filterOverlay( 'number', 'count', [])
+                runFilter = false;
             }
 
             cell.appendChild(popup)
@@ -451,42 +540,50 @@
                 e.preventDefault();
                 let formData = new FormData(e.target)
 
-                for ( let _data of formData ) {
-                    if ( _data[1].toLowerCase() !== 'select an option' ) {
-                        this.filters[_data[0]] = _data[1]
+                if ( runFilter ) {
+                    for ( let _data of formData ) {
+                        if ( _data[1].toLowerCase() !== 'select an option' ) {
+                            this.filters[_data[0]] = _data[1]
 
-                        let columnName = _data[0];
-                        if ( _data[0] === 'created_by' ) {
-                            columnName = 'Created By';
-                        }
-                        let li = document.createElement( 'li' );
-                        li.dataset.filter = _data[1].toString();
-                        li.className = 'filterBadges-badge inline text-xs px-2 py-0.5 bg-gray-200 text-gray-600 rounded mr-2';
-                        li.innerHTML = `<span class="font-bold capitalize">${columnName}:</span> ${_data[1]} <button class="fa-solid fa-times pl-1"></button>`;
-
-                        document.getElementById( 'filterContainer' ).appendChild( li );
-
-                        li.querySelector( '.fa-times' ).addEventListener( 'click', () => {
-                            // remove the filter pill and the filter
-                            let parent = document.getElementById( 'filterContainer' );
-                            parent.querySelector( `li[data-filter="${_data[1].toString()}"]` ).remove();
-                            delete this.filters[_data[0]];
-
-                            if ( Object.keys(this.filters).length > 0 ) {
-                                this.buildTable(true);
-                            } else {
-                                this.buildTable(false);
+                            let columnName = _data[0];
+                            if ( _data[0] === 'creator' ) {
+                                columnName = 'Created By';
                             }
-                        } );
+                            let li = document.createElement( 'li' );
+                            li.dataset.filter = _data[1].toString();
+                            li.className = 'filterBadges-badge inline text-xs px-2 py-0.5 bg-gray-200 text-gray-600 rounded mr-2';
+                            li.innerHTML = `<span class="font-bold capitalize">${columnName}:</span> ${_data[1]} <button class="fa-solid fa-times pl-1"></button>`;
+
+                            document.getElementById( 'filterContainer' ).appendChild( li );
+
+                            li.querySelector( '.fa-times' ).addEventListener( 'click', () => {
+                                // remove the filter pill and the filter
+                                let parent = document.getElementById( 'filterContainer' );
+                                parent.querySelector( `li[data-filter="${_data[1].toString()}"]` ).remove();
+                                delete this.filters[_data[0]];
+
+                                if ( Object.keys(this.filters).length > 0 ) {
+                                    this.buildTable(true);
+                                } else {
+                                    this.buildTable(false);
+                                }
+                            } );
+                        }
+                    }
+                    if ( Object.keys(this.filters).length > 0 ) {
+                        this.buildTable(true);
+                    } else {
+                        this.buildTable(false);
                     }
                 }
-                if ( Object.keys(this.filters).length > 0 ) {
-                    this.buildTable(true);
-                } else {
-                    this.buildTable(false);
-                }
+                popup.remove();
+
+            } );
+
+            popup.addEventListener( 'mouseleave', ( e ) => {
                 popup.remove();
             } );
+
         }
 
         searchData() {
@@ -525,7 +622,6 @@
             if ( !filters ) {
 
                 this.data.data.forEach( ( set, idx ) => {
-                    console.log(set,idx)
                     this.buildTableRow( set, idx );
                 } );
             } else {
@@ -623,7 +719,7 @@
                 // Handle the first cell in the row
                 if ( idx === 0 ) {
                     cell.classList.add( 'mod-expander' )
-                    cell.innerHTML = `<span class="primary text-gray-600">${set.data[item]}</span><span class="text-gray-400 secondary">${set.data.created_by}</span>`
+                    cell.innerHTML = `<span class="primary text-gray-600">${set.data[item]}</span><span class="text-gray-400 secondary">${set.data.creator}</span>`
                 }
 
                 if ( idx === 3 ) {
