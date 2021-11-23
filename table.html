@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.16/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Table</title>
+
+    <style>
+        .th-inner {
+            display: flex;
+            align-items: center;
+        }
+
+        th.sticky::after {
+            position: absolute;
+            height: 100%;
+            border-right: 1px solid rgba(229,231,235);;
+            content: "";
+            right: 0;
+            top:0;
+        }
+
+        td.sticky::after {
+            position: absolute;
+            height: 100%;
+            border-right: 1px solid rgba(229,231,235);;
+            content: "";
+            right: 0;
+            top:0;
+        }
+        .tableCell {
+            border-top: 1px solid #E5E7EB;
+        }
+        .dateCell.mod-date {
+            display: block;
+        }
+        .dateCell.mod-time {
+            display: block;
+
+        }
+        .sortSet-button.is-active {
+            color: #6D28D9 !important;
+        }
+        tr:hover td {
+            --tw-bg-opacity: 1;
+            background-color: rgba(249,250,251,var(--tw-bg-opacity));
+            cursor: pointer;
+        }
+
+        .filterSet, .sortSet {
+            display: flex;
+            flex-direction: column;
+            padding: 0 5px
+        }
+            .filterSet-button, .sortSet-button {
+                color: #ccc;
+                height: auto;
+            }
+            .filterSet-button:hover, .sortSet-button:hover {
+                color: #999;
+            }
+
+        .tableCell.mod-expander {
+            position: relative;
+            padding-left: 2.65rem;
+        }
+        .tableCell.mod-expander::before {
+            content: "\f105";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            transition: all 0.25s ease;
+        }
+            .tableCell.mod-expander.is-open::before {
+                transform: translateY(-50%) rotate( 90deg );
+            }
+
+        .tableCell .primary {
+            display: block;
+            font-weight: 600;
+        }
+        .tableCell .secondary {
+            display: block;
+        }
+
+        .tableCell.mod-detailRow {
+            border-top: none;
+            padding-top: 10px;
+        }
+        tr.expanded .tableCell {
+            border-top: 1px solid #9CA3AF;
+            /*background: #fff !important;*/
+        }
+            tr.expanded .tableCell:first-child {
+                border-left: 1px solid #9CA3AF;
+            }
+            tr.expanded .tableCell:last-child {
+                border-right: 1px solid #9CA3AF;
+            }
+        tr.detailRow.expanded .tableCell {
+            border-bottom: 1px solid #9CA3AF;
+            border-top: none !important;
+            cursor: default;
+        }
+            tr.detailRow .tableCell:hover {
+                background: #fff;
+            }
+            tr.expanded.detailRow .tableCell:first-child {
+                border-left: 1px solid #9CA3AF;
+            }
+            tr.expanded.detailRow .tableCell:last-child {
+                border-right: 1px solid #9CA3AF;
+            }
+        .overflowMenu {
+            padding: 5px;
+            margin-left: 10px;
+        }
+        select {
+            padding:5px;
+        }
+    </style>
+
+</head>
+<body style="display: flex;margin-top: 300px;justify-content:center;">
+<div>
+    <div class="pb-3">
+        <div class="searchWrap relative">
+            <button class="fa-solid fa-magnifying-glass absolute h-full p-2 text-gray-400" id="searchButton"></button>
+            <input type="text" id="searchInput" class="py-1 px-2 pl-8 border rounded w-2/5" placeholder="Search for name, creator, ID, or status...">
+        </div>
+    </div>
+    <ul class="filterBadges pb-3" id="filterContainer">
+    </ul>
+    <div style="width:1120px; height: 400px;" class="overflow-y-scroll px-1">
+        <table id="table" class="min-w-full divide-y divide-gray-200 table-fixed">
+            <thead class="bg-gray-50 divide-y divide-gray-200 sticky top-0" style="z-index:200"></thead>
+            <tbody class="bg-white"></tbody>
+        </table>
+    </div>
+</div>
+</body>
+<script>
+    let table = {
+        headers: [
+            ["Name / Created By", 250], ["ID"], ["Status"], ["Next Transfer"], ["Last Transfer"], ["Count"], [""]
+        ],
+        data: [
+            {
+                data: {
+                    name: "Maroon Iron Chow Chow",
+                    created_by: "John Medeski",
+                    id: "10",
+                    status: "Completed",
+                    next_transfer: "30 Oct 2021 11:25",
+                    last_transfer: "-",
+                    count: 100,
+                    actions: "",
+                },
+                detail: ["These are my details for row 1"]
+            },
+            {
+                data: {
+                    name: "Aqua Gold Sheepdog",
+                    created_by: "Billy Martin",
+                    id: "09",
+                    status: "Error",
+                    next_transfer: "29 Oct 2021 15:30",
+                    last_transfer: "-",
+                    count: 30,
+                    actions: "",
+                },
+                detail: ["These are my details for row 1"]
+            },
+            {
+                data: {
+                    name: "Aqua Zinc Cocker Spaniel",
+                    created_by: "Chris Wood",
+                    id: "08",
+                    status: "Completed",
+                    next_transfer: "12 Oct 2021 16:42",
+                    last_transfer: "-",
+                    count: 55,
+                    actions: "",
+                },
+                detail: ["These are my details for row 1"]
+            },
+            {
+                data: {
+                    name: "Silver Copper Spaniel",
+                    created_by: "Chris Wood",
+                    id: "07",
+                    status: "Ready",
+                    next_transfer: "11 Oct 2021 09:03",
+                    last_transfer: "-",
+                    count: 1,
+                    actions: "",
+                },
+                detail: ["These are my details for row 1"]
+            },
+            {
+                data: {
+                    name: "Fuschia Silver Corgi",
+                    created_by: "John Medeski",
+                    id: "06",
+                    status: "Configuring",
+                    next_transfer: "09 Oct 2021 16:21",
+                    last_transfer: "-",
+                    count: 12,
+                    actions: "",
+                },
+                detail: ["These are my details for row 1"]
+            },
+            {
+                data: {
+                    name: "Gray Tin Pomeranian",
+                    created_by: "John Medeski",
+                    id: "05",
+                    status: "Completed",
+                    next_transfer: "04 Oct 2021 10:15",
+                    last_transfer: "-",
+                    count: 48,
+                    actions: "",
+                },
+                detail: ["These are my details for row 1"]
+            },
+            {
+                data: {
+                    name: "Bitter Volunteer",
+                    created_by: "Billy Martin",
+                    id: "04",
+                    status: "Ready",
+                    next_transfer: "04 Oct 2021 09:55",
+                    last_transfer: "-",
+                    count: 48,
+                    actions: "",
+                },
+                detail: ["These are my details for row 1"]
+            },
+            {
+                data: {
+                    name: "Eager Pirate",
+                    created_by: "John Medeski",
+                    id: "03",
+                    status: "Completed",
+                    next_transfer: "02 Oct 2021 11:56",
+                    last_transfer: "-",
+                    count: 25,
+                    actions: "",
+                },
+                detail: ["These are my details for row 1"]
+            },
+            {
+                data: {
+                    name: "Tinted Mamba",
+                    created_by: "Chris Wood",
+                    id: "02",
+                    status: "Completed",
+                    next_transfer: "01 Oct 2021 12:12",
+                    last_transfer: "-",
+                    count: 365,
+                    actions: "",
+                },
+                detail: ["These are my details for row 1"]
+            },
+            {
+                data: {
+                    name: "Major Dragonfly",
+                    created_by: "Chris Wood",
+                    id: "01",
+                    status: "Ready",
+                    next_transfer: "01 Oct 2021 15:30",
+                    last_transfer: "-",
+                    count: 2,
+                    actions: "",
+                },
+                detail: ["These are my details for row 1"]
+            },
+        ],
+    };
+
+    const monthStrings = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+    const isDate = (date) => {
+        return ( new Date(date) !== "Invalid Date") && !isNaN( new Date(date) );
+    }
+
+    const filterOverlay = ( type, column, data ) => {
+        let overlay = document.createElement( 'form' );
+        let overlayInner = document.createElement( 'div' );
+        let overlayHeader = document.createElement( 'div' );
+        let overlayFooter = document.createElement( 'div' );
+        overlayInner.className = 'filterOverlay-content pt-3 pb-3';
+        overlayHeader.className = 'filterOverlay-header';
+        overlayFooter.className = 'filterOverlay-footer';
+        overlay.className = 'filterOverlay shadow-xl absolute p-6 bg-white';
+        overlay.style.zIndex = '1000';
+
+        if ( type === 'number' ) {
+
+        } else if ( type === 'text' ) {
+
+        } else if ( type === 'select' ) {
+            let options = '<option>Select an option</option>'
+            data.forEach( ( item ) => {
+                options += `<option value="${item}">${item}</option>`;
+            })
+            console.log(column.toLowerCase().split(" ").join("_"))
+            overlayInner.innerHTML = `<select class="w-full border border-solid border-gray-200 text-gray-800 rounded" name="${column.toLowerCase().split(" ").join("_")}" id="${column.toLowerCase().split(" ").join("_")}">${options}</select>`
+        } else if ( type === 'date' ) {
+
+        }
+
+        overlayHeader.innerHTML = `<h3>${column}</h3>`
+        overlayFooter.innerHTML = `
+            <button class="js-cancel inline-flex items-center border border-transparent disabled:opacity-50 px-3 py-2 text-sm leading-4 font-medium rounded-md shadow-sm text-purple-600 bg-gray-50 hover:bg-gray-200">Cancel</button>
+            <button class="js-filter inline-flex items-center border border-transparent disabled:opacity-50 px-3 py-2 text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-800">Add Filter</button>
+            `;
+        overlay.appendChild(overlayHeader);
+        overlay.appendChild(overlayInner);
+        overlay.appendChild(overlayFooter);
+
+        return overlay;
+    }
+
+    class TableIt {
+        constructor( selector, data ) {
+            this.data = data;
+            this.table = document.getElementById( selector );
+            this.dateFormat = new RegExp( '[0-9]+ [A-Za-z]+ [0-9]+ [0-9]+:[0-9]+' );
+            this.filters = [];
+            this.buildTableHeaders();
+            this.buildTable();
+            this.searchData();
+        }
+
+        // Sort the columns
+        sortData( column, direction ) {
+            let columnSlug = column.split(" ").join("_").toLowerCase()
+            const sorter = ( type, direction ) => {
+                console.log(type, direction)
+                this.data.data.sort( function ( a, b ) {
+
+                    if ( type === 'string' ) {
+
+                        let strA = a['data'][columnSlug].toLowerCase();
+                        let strB = b['data'][columnSlug].toLowerCase();
+
+                        if ( direction === 'dsc' ) {
+
+                            if ( strA < strB ) {
+                                return -1;
+                            }
+                            if ( strA > strB ) {
+                                return 1;
+                            }
+                            return 0;
+
+                        } else {
+
+                            if ( strA > strB ) {
+                                return -1;
+                            }
+                            if ( strA < strB ) {
+                                return 1;
+                            }
+                            return 0;
+                        }
+                    }
+                    else if ( type === 'integer' ) {
+                        if ( direction === 'dsc' ) {
+                            return a['data'][columnSlug] - b['data'][columnSlug]
+                        } else {
+                            return b['data'][columnSlug] - a['data'][columnSlug]
+                        }
+                    }
+                    else if ( type === 'date' ) {
+                        let dateA = new Date(a['data'][columnSlug])
+                        let dateB = new Date(b['data'][columnSlug])
+                        if ( direction === 'dsc' ) {
+                            return dateB - dateA
+                        } else {
+                            return dateA - dateB
+                        }
+                    }
+                } );
+
+                this.buildTable();
+            }
+
+            if ( typeof this.data.data[0]['data'][columnSlug] === 'string') {
+
+                if ( this.dateFormat.test(this.data.data[0]['data'][columnSlug]) ) {
+                    sorter( 'date', direction);
+                } else {
+                    sorter( 'string', direction);
+                }
+            } else {
+                sorter('integer', direction);
+            }
+
+        }
+
+        filterData( column, cell ) {
+            let popup;
+
+            if ( column.toLowerCase() === 'name / created by' ) {
+                let people = [];
+
+                this.data.data.forEach( ( row ) => {
+
+                    if ( !people.includes( row.data.created_by ) ) {
+                        people.push( row.data.created_by );
+                    }
+                } );
+
+                popup = filterOverlay( 'select', 'Created By', people.sort() )
+
+            } else if ( column.toLowerCase() === 'id' ) {
+                console.log('filter by ID')
+            } else if ( column.toLowerCase() === 'status' ) {
+                let statuses = [];
+                this.data.data.forEach( ( row ) => {
+                    if ( !statuses.includes( row.data.status ) ) {
+                        statuses.push( row.data.status );
+                    }
+                } );
+                popup = filterOverlay( 'select', 'Status', statuses.sort() )
+
+            } else if ( column.toLowerCase() === 'next transfer' ) {
+
+            } else if ( column.toLowerCase() === 'last transfer' ) {
+
+            } else if ( column.toLowerCase() === 'count transfer' ) {
+
+            }
+
+            cell.appendChild(popup)
+            popup.querySelector('.js-cancel').addEventListener( 'click', ( e ) => {
+                e.preventDefault();
+                popup.remove();
+            });
+
+            popup.addEventListener( 'submit', ( e ) => {
+                e.preventDefault();
+                let formData = new FormData(e.target)
+
+                for ( let _data of formData ) {
+                    if ( _data[1].toLowerCase() !== 'select an option' ) {
+                        this.filters[_data[0]] = _data[1]
+
+                        let columnName = _data[0];
+                        if ( _data[0] === 'created_by' ) {
+                            columnName = 'Created By';
+                        }
+                        let li = document.createElement( 'li' );
+                        li.dataset.filter = _data[1].toString();
+                        li.className = 'filterBadges-badge inline text-xs px-2 py-0.5 bg-gray-200 text-gray-600 rounded mr-2';
+                        li.innerHTML = `<span class="font-bold capitalize">${columnName}:</span> ${_data[1]} <button class="fa-solid fa-times pl-1"></button>`;
+
+                        document.getElementById( 'filterContainer' ).appendChild( li );
+
+                        li.querySelector( '.fa-times' ).addEventListener( 'click', () => {
+                            // remove the filter pill and the filter
+                            let parent = document.getElementById( 'filterContainer' );
+                            parent.querySelector( `li[data-filter="${_data[1].toString()}"]` ).remove();
+                            delete this.filters[_data[0]];
+
+                            if ( Object.keys(this.filters).length > 0 ) {
+                                this.buildTable(true);
+                            } else {
+                                this.buildTable(false);
+                            }
+                        } );
+                    }
+                }
+                if ( Object.keys(this.filters).length > 0 ) {
+                    this.buildTable(true);
+                } else {
+                    this.buildTable(false);
+                }
+                popup.remove();
+            } );
+        }
+
+        searchData() {
+            let search = document.getElementById( 'searchInput' );
+            let button = document.getElementById( 'searchButton');
+
+            const searchIt = () => {
+                let li = document.createElement( 'li' );
+                li.className = 'filterBadges-badge inline text-xs px-2 py-0.5 bg-gray-200 text-gray-600 rounded mr-2';
+                li.innerHTML = `<span class="font-bold capitalize">Search:</span> This is just an example <button class="fa-solid fa-times pl-1"></button>`;
+
+                document.getElementById( 'filterContainer' ).appendChild( li );
+                search.value = '';
+                li.querySelector( '.fa-times' ).addEventListener( 'click', () => {
+                    // remove the filter pill and the filter
+                    li.remove();
+                } );
+            }
+
+            button.addEventListener( 'click', ( e ) => {
+                searchIt();
+            } );
+
+            search.addEventListener( 'keydown', ( e ) => {
+                if ( e.key === 'Enter' ) {
+                    searchIt();
+                }
+            } )
+        }
+
+        buildTable( filters ) {
+            this.table.querySelectorAll('tbody tr').forEach( ( tr ) => {
+                tr.remove();
+            })
+
+            if ( !filters ) {
+
+                this.data.data.forEach( ( set, idx ) => {
+                    console.log(set,idx)
+                    this.buildTableRow( set, idx );
+                } );
+            } else {
+                let filtered = []
+                let filter = this.filters
+
+                filtered = this.data.data.filter( ( item ) => {
+                    for ( const key in filter ) {
+
+                        if ( item.data[key] === undefined || item.data[key] !== filter[key] ) {
+                            return false;
+                        }
+                    }
+                    return true;
+                } );
+
+                filtered.forEach( ( set, idx ) => {
+                    this.buildTableRow( set, idx );
+                } );
+            }
+        }
+
+        buildTableHeaders() {
+            let row = document.createElement( 'tr' );
+            this.data.headers.forEach( ( header, idx ) => {
+                let cell = document.createElement( 'th' );
+                cell.className = "whitespace-nowrap px-6 py-3 text-xs font-medium text-gray-600 text-left bg-gray-50 table-head mod-expandable mod-sortable mod-filterable"
+
+                if ( header[0] ) {
+
+                    if ( idx === 0 ) {
+                        cell.innerHTML = `
+                    <span class="th-inner">
+                        <span class="label">${header[0]}</span>
+                        <span class="filterSet">
+                            <button class="filterSet-button fa-solid fa-filter" data-type="${header[0]}"></button>
+                        </span>
+                    </span>`;
+                    } else {
+                        cell.innerHTML = `
+                    <span class="th-inner">
+                        <span class="sortSet">
+                            <button class="sortSet-button mod-asc js-sort fa-solid fa-angle-up" data-sort="asc"></button>
+                            <button class="sortSet-button mod-dsc js-sort fa-solid fa-angle-down" data-sort="dsc"></button>
+                        </span>
+                        <span class="label">${header[0]}</span>
+                        <span class="filterSet">
+                            <button class="filterSet-button fa-solid fa-filter" data-type="${header[0]}"></button>
+                        </span>
+                    </span>`;
+                    }
+
+                    cell.querySelector( '.filterSet-button' ).addEventListener( 'click', ( e ) => {
+                        this.filterData( e.target.dataset.type, cell )
+                    } )
+                }
+
+                cell.querySelectorAll( '.js-sort' ).forEach( ( sortButton ) => {
+                    sortButton.addEventListener( 'click', () => {
+                        document.querySelectorAll( '.js-sort' ).forEach( ( button ) => {
+                            button.classList.remove( 'is-active' );
+                        });
+                        sortButton.classList.add( 'is-active' );
+                        this.sortData( header[0], sortButton.dataset.sort )
+                    } );
+
+                });
+
+
+
+                cell.setAttribute( 'scope', 'col')
+
+                // If this array has a "width" value, add it here
+                if ( header[1] ) {
+                    cell.style.minWidth = header[1].toString() + 'px'
+                }
+
+                row.appendChild( cell )
+            } );
+
+            this.table.querySelector( 'thead' ).appendChild( row );
+        }
+
+        // WHAT A CLUSTER
+        buildTableRow( set, rowIdx ) {
+            let row = document.createElement( 'tr' );
+            row.className = 'dataRow'
+
+            Object.keys(set.data).forEach( ( item, idx ) => {
+                let cell = document.createElement( 'td' );
+                cell.className = "px-6 py-4 text-sm text-gray-500 text-left tableCell"
+                cell.innerText = set.data[item];
+                cell.setAttribute( 'scope', 'col')
+
+                // Handle the first cell in the row
+                if ( idx === 0 ) {
+                    cell.classList.add( 'mod-expander' )
+                    cell.innerHTML = `<span class="primary text-gray-600">${set.data[item]}</span><span class="text-gray-400 secondary">${set.data.created_by}</span>`
+                }
+
+                if ( idx === 3 ) {
+                    let state = 'bg-gray-100 text-gray-800';
+                    if ( set.data[item].toLowerCase() === 'error') {
+                        state = 'bg-red-100 text-red-800'
+                    } else if ( set.data[item].toLowerCase() === 'configuring') {
+                        state = 'bg-yellow-100 text-yellow-800'
+                    } else if ( set.data[item].toLowerCase() === 'success' || set.data[item].toLowerCase() === 'completed' ) {
+                        state = 'bg-green-100 text-green-800';
+                    }
+                    cell.innerHTML = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${state}">${set.data[item]}</span>`;
+                }
+
+                // Integers or Floats should alight right
+                if ( Number.isInteger( set.data[item] ) ) {
+                    cell.classList.remove( "text-left" );
+                    cell.classList.add( "text-right" );
+                } else if ( idx === 4 || idx === 5 ) {
+                    if ( set.data[item] !== '-') {
+                        let date = new Date(set.data[item])
+                        let formattedDate = `${date.getDate()} ${monthStrings[ date.getMonth() ]} ${date.getFullYear()}`;
+                        let fomattedTime = `${date.getHours()}:${date.getMinutes()}`;
+                        cell.innerHTML = `<span class="dateCell mod-date">${formattedDate}</span><span class="dateCell mod-time text-gray-400">${fomattedTime}</span>`;
+                    }
+                }
+
+                // Handle the last cell in the row
+                if ( idx === Object.keys(set.data).length - 1 ) {
+                    cell.style.textAlign = 'right';
+                    cell.style.whiteSpace = 'nowrap'
+                    cell.innerHTML = "<a href='https://www.google.com' class='text-purple-800' target='_blank'>Edit</a><button class='overflowMenu fa-solid fa-ellipsis-vertical'></button>"
+                }
+
+                if ( idx !== 1 ) {
+                    row.appendChild( cell );
+                }
+
+
+            } );
+            this.table.querySelector( 'tbody' ).appendChild( row );
+
+            set.detail.forEach( ( item ) => {
+                let detailRow = document.createElement( 'tr' );
+                let cell = document.createElement( 'td' );
+                detailRow.className = 'hidden detailRow';
+                cell.className = "px-6 py-4 text-sm text-gray-500 text-left tableCell mod-detailRow"
+                cell.colSpan = 7;
+                cell.innerHTML = `
+                <div class="bg-white max-w-7xl">
+                    <div class="grid md:grid-cols-5 grid-cols-1 md:gap-6 gap-0">
+                        <div class="md:col-span-1">
+                            <h2 class="text-lg font-medium">Lorem Ipsum Dolor</h2></div>
+                            <div class="mt-5 md:mt-0 md:col-span-4">
+                                <div class="grid grid-cols-6 gap-1">
+                                    <div class="flex flex-col col-span-6 sm:col-span-4 gap-1">
+                                        <div>
+                                            <p class="mb-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A adipisci aliquam assumenda consectetur cupiditate doloremque, eaque error, ex impedit magnam nemo perspiciatis praesentium quaerat quia quibusdam quidem quod repellendus, tenetur totam ut.</p><p class="mb-3">Ab accusamus ad amet, consectetur culpa dolores esse excepturi fuga illum, ipsam laudantium, magni nesciunt odit officiis omnis placeat possimus qui quia quo rem! Debitis dolore inventore iste obcaecati quisquam. Perspiciatis, rerum?</p><p class="mb-3">Autem commodi cum, cumque dignissimos dolore ea id illo illum ipsa itaque, laudantium nam numquam officiis pariatur provident qui reprehenderit totam velit veniam voluptatem? Laboriosam nobis, officia perspiciatis quas soluta tempore ullam?</p><p class="mb-3">Ab aliquid architecto atque aut corporis dignissimos, dolor dolorem doloremque eveniet exercitationem facere, magni mollitia nulla quo sed similique soluta tenetur totam ut, vero. Ex iste odit optio possimus quasi repellat ullam.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <div class="text-right p-1">
+                    <button class="inline-flex items-center border border-transparent disabled:opacity-50 px-3 py-2 text-sm leading-4 font-medium rounded-md shadow-sm text-purple-600 bg-gray-50 hover:bg-gray-200">Action</button>
+                    <button class="inline-flex items-center border border-transparent disabled:opacity-50 px-3 py-2 text-sm leading-4 font-medium rounded-md shadow-sm text-purple-600 bg-gray-50 hover:bg-gray-200">Action</button>
+                    <button class="inline-flex items-center border border-transparent disabled:opacity-50 px-3 py-2 text-sm leading-4 font-medium rounded-md shadow-sm text-purple-600 bg-gray-50 hover:bg-gray-200">Action</button>
+                </div>
+                `;
+                detailRow.appendChild( cell )
+                this.table.querySelector( 'tbody' ).appendChild(detailRow);
+            })
+
+            row.addEventListener( 'click', ( e ) => {
+                if ( row.classList.contains( 'expanded' ) ) {
+                    row.classList.remove( 'expanded' );
+                    row.querySelector( '.mod-expander').classList.remove('is-open');
+                    row.nextElementSibling.classList.remove('expanded');
+                    row.nextElementSibling.classList.add('hidden');
+                } else {
+                    document.querySelectorAll( '.dataRow' ).forEach( ( dataRow ) => {
+                        dataRow.classList.remove( 'expanded' );
+                        dataRow.querySelector('.mod-expander').classList.remove( 'is-open' );
+                    } );
+                    document.querySelectorAll( '.detailRow' ).forEach( ( detailRow ) => {
+                        detailRow.classList.remove( 'expanded' );
+                        detailRow.classList.add( 'hidden' );
+                    } );
+
+                    row.classList.add( 'expanded' );
+                    row.querySelector( '.mod-expander').classList.add('is-open');
+                    row.nextElementSibling.classList.add('expanded');
+                    row.nextElementSibling.classList.remove('hidden');
+                }
+            } )
+            row.querySelector( '.overflowMenu' ).addEventListener( 'click', ( e ) => {
+                e.stopPropagation();
+            } );
+        }
+    }
+
+    new TableIt( 'table', table );
+</script>
+</html>
