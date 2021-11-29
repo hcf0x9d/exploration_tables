@@ -434,6 +434,12 @@ class TableIt {
             let results = []
             const searchValue = search.value.toLowerCase();
 
+            let oldBadge = document.getElementById( 'filterContainer' ).querySelector( '.search-badge' );
+
+            if ( oldBadge ) {
+                oldBadge.remove();
+            }
+
             for( let i=0; i<this.data.data.length; i++ ) {
                 for ( let key in this.data.data[i]['data'] ) {
                     if ( this.data.data[i]['data'][key].toString().toLowerCase().indexOf(searchValue) !== -1 ) {
@@ -445,7 +451,7 @@ class TableIt {
             this.searchResults = results;
 
             let li = document.createElement( 'li' );
-            li.className = 'filterBadges-badge inline text-xs px-2 py-0.5 bg-gray-200 text-gray-600 rounded mr-2';
+            li.className = 'search-badge filterBadges-badge inline text-xs px-2 py-0.5 bg-gray-200 text-gray-600 rounded mr-2';
             li.innerHTML = `<span class="font-bold capitalize">Search:</span> ${ search.value } <button class="fa-solid fa-times pl-1"></button>`;
 
             document.getElementById( 'filterContainer' ).appendChild( li );
