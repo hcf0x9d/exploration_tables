@@ -430,16 +430,34 @@ class TableIt {
         let button = document.getElementById( 'searchButton');
 
         const searchIt = () => {
+
+            let results = []
+            const searchValue = search.value.toLowerCase();
+
+            for( let i=0; i<this.data.data.length; i++ ) {
+                for ( let key in this.data.data[i]['data'] ) {
+                    if ( this.data.data[i]['data'][key].toString().toLowerCase().indexOf(searchValue) !== -1 ) {
+                        results.push(this.data.data[i]);
+                    }
+                }
+            }
+
+            this.searchResults = results;
+
             let li = document.createElement( 'li' );
             li.className = 'filterBadges-badge inline text-xs px-2 py-0.5 bg-gray-200 text-gray-600 rounded mr-2';
-            li.innerHTML = `<span class="font-bold capitalize">Search:</span> This is just an example <button class="fa-solid fa-times pl-1"></button>`;
+            li.innerHTML = `<span class="font-bold capitalize">Search:</span> ${ search.value } <button class="fa-solid fa-times pl-1"></button>`;
 
             document.getElementById( 'filterContainer' ).appendChild( li );
             search.value = '';
             li.querySelector( '.fa-times' ).addEventListener( 'click', () => {
                 // remove the filter pill and the filter
                 li.remove();
+                this.searchResults = false;
+                this.buildTable( true );
             } );
+
+            this.buildTable( true );
         }
 
         button.addEventListener( 'click', ( e ) => {
@@ -459,23 +477,44 @@ class TableIt {
         })
 
         if ( !filters ) {
-
-            this.data.data.forEach( ( set, idx ) => {
-                this.buildTableRow( set, idx );
-            } );
+            if ( this.searchResults ) {
+                this.searchResults.forEach( ( set, idx ) => {
+                    this.buildTableRow( set, idx );
+                } );
+            } else {
+                this.data.data.forEach( ( set, idx ) => {
+                    this.buildTableRow( set, idx );
+                } );
+            }
         } else {
             let filtered = []
             let filter = this.filters
 
-            filtered = this.data.data.filter( ( item ) => {
-                for ( const key in filter ) {
+            if ( this.searchResults ) {
 
-                    if ( item.data[key] === undefined || item.data[key] !== filter[key] ) {
-                        return false;
+                filtered = this.searchResults.filter( ( item ) => {
+                    for ( const key in filter ) {
+
+                        if ( item.data[key] === undefined || item.data[key] !== filter[key] ) {
+                            return false;
+                        }
                     }
-                }
-                return true;
-            } );
+                    return true;
+                } );
+
+            } else {
+                filtered = this.data.data.filter( ( item ) => {
+                    for ( const key in filter ) {
+
+                        if ( item.data[key] === undefined || item.data[key] !== filter[key] ) {
+                            return false;
+                        }
+                    }
+                    return true;
+                } );
+
+            }
+
 
             filtered.forEach( ( set, idx ) => {
                 this.buildTableRow( set, idx );
