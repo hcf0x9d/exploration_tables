@@ -541,19 +541,19 @@ class TableIt {
                     <span class="th-inner">
                         <span class="label">${header[0]}</span>
                         <span class="filterSet">
-                            <button class="filterSet-button fa-solid fa-filter" data-type="${header[0]}"></button>
+                            <button class="filterSet-button fa-solid fa-filter text-gray-400 hover:text-gray-600" data-type="${header[0]}"></button>
                         </span>
                     </span>`;
                 } else {
                     cell.innerHTML = `
                     <span class="th-inner">
                         <span class="sortSet">
-                            <button class="sortSet-button mod-asc js-sort fa-solid fa-angle-up" data-sort="asc"></button>
-                            <button class="sortSet-button mod-dsc js-sort fa-solid fa-angle-down" data-sort="dsc"></button>
+                            <button class="sortSet-button mod-asc js-sort fa-solid fa-angle-up text-gray-400 hover:text-gray-600" data-sort="asc"></button>
+                            <button class="sortSet-button mod-dsc js-sort fa-solid fa-angle-down text-gray-400 hover:text-gray-600" data-sort="dsc"></button>
                         </span>
                         <span class="label">${header[0]}</span>
                         <span class="filterSet">
-                            <button class="filterSet-button fa-solid fa-filter" data-type="${header[0]}"></button>
+                            <button class="filterSet-button fa-solid fa-filter text-gray-400 hover:text-gray-600" data-type="${header[0]}"></button>
                         </span>
                     </span>`;
                 }
@@ -606,7 +606,7 @@ class TableIt {
                     cell.classList.add( 'mod-expander' )
                 }
 
-                cell.innerHTML = `<span class="primary text-gray-600">${set.data[item]}</span><span class="text-gray-400 secondary">${set.data.creator}</span>`
+                cell.innerHTML = `<span class="primary text-gray-800">${set.data[item]}</span><span class="text-gray-400 secondary">${set.data.creator}</span>`
             }
 
             // This is a "status column," so we need to make status badges

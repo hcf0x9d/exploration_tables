@@ -57,11 +57,8 @@
             padding: 0 5px
         }
             .filterSet-button, .sortSet-button {
-                color: #ccc;
+                /*color: #ccc;*/
                 height: auto;
-            }
-            .filterSet-button:hover, .sortSet-button:hover {
-                color: #999;
             }
 
         .tableCell.mod-expander {
@@ -121,6 +118,17 @@
         .overflowMenu {
             padding: 5px;
             margin-left: 10px;
+            position: relative;
+        }
+        .filterOverlay::after {
+            content: "";
+            background: transparent;
+            position: absolute;
+            left: -20px;
+            right: -20px;
+            top: -5px;
+            bottom: -20px;
+            z-index: -1;
         }
         select {
             padding:5px;
