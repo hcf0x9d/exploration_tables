@@ -639,7 +639,7 @@ class TableIt {
             if ( idx === Object.keys(set.data).length - 1 ) {
                 cell.style.textAlign = 'right';
                 cell.style.whiteSpace = 'nowrap'
-                cell.innerHTML = "<a href='#' class='text-purple-800'>Edit</a><button class='overflowMenu fa-solid fa-ellipsis-vertical'></button>"
+                cell.innerHTML = "<a href='#' class='text-purple-800 px-2'>Edit</a><button class='overflowMenu fa-solid fa-ellipsis-vertical'></button>"
             }
 
             if ( idx !== 1 ) {
