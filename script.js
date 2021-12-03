@@ -639,6 +639,10 @@ class TableIt {
                 cell.style.textAlign = 'right';
                 cell.style.whiteSpace = 'nowrap'
                 cell.innerHTML = "<a href='#' class='text-purple-800 px-2'>Edit</a><button class='overflowMenu fa-solid fa-ellipsis-vertical'></button>"
+
+                cell.querySelector('a' ).addEventListener( 'click', ( e ) => {
+                    e.stopPropagation();
+                } );
             }
 
             if ( idx !== 1 ) {
