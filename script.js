@@ -147,7 +147,7 @@ class Modal {
         <div class="sm:flex sm:items-start">
           <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
             <h3 class="text-xl leading-6 font-medium text-gray-900" id="modal-title">
-              ${this.data.data.name}
+              ${this.data.name}
             </h3>
                     <div class="bg-white max-w-7xl">
                         <div class="grid md:grid-cols-5 grid-cols-1 md:gap-6 gap-0 py-4">
@@ -653,97 +653,95 @@ class TableIt {
 
         if ( this.tableStyle === 'expand' ) {
 
-            set.detail.forEach( ( item ) => {
-                let detailRow = document.createElement( 'tr' );
-                let cell = document.createElement( 'td' );
+            let detailRow = document.createElement( 'tr' );
+            let cell = document.createElement( 'td' );
 
-                // This is the stuff that's actually in the object, but right now we aren't using it
-                console.log(item)
+            // This is the stuff that's actually in the object, but right now we aren't using it
+            // console.log(item)
 
-                detailRow.className = 'hidden detailRow';
-                cell.className = "px-6 py-4 text-sm text-gray-500 text-left tableCell mod-detailRow"
-                cell.colSpan = 7;
-                cell.innerHTML = `
-                    <div class="bg-white max-w-7xl">
-                        <div class="grid md:grid-cols-5 grid-cols-1 md:gap-6 gap-0 py-4">
-                            <div class="md:col-span-1">
-                                <h2 class="text-lg font-medium">Lorem Ipsum Dolor</h2></div>
-                                <div class="mt-5 md:mt-0 md:col-span-4">
-                                    <div class="grid grid-cols-6 gap-1">
-                                        <div class="flex flex-col col-span-6 gap-1">
-                                            <div>
-                                                <p class="mb-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A adipisci aliquam assumenda consectetur cupiditate doloremque, eaque error, ex impedit magnam nemo perspiciatis praesentium quaerat quia quibusdam quidem quod repellendus, tenetur totam ut.</p><p class="mb-3">Ab accusamus ad amet, consectetur culpa dolores esse excepturi fuga illum, ipsam laudantium, magni nesciunt odit officiis omnis placeat possimus qui quia quo rem! Debitis dolore inventore iste obcaecati quisquam. Perspiciatis, rerum?</p><p class="mb-3">Autem commodi cum, cumque dignissimos dolore ea id illo illum ipsa itaque, laudantium nam numquam officiis pariatur provident qui reprehenderit totam velit veniam voluptatem? Laboriosam nobis, officia perspiciatis quas soluta tempore ullam?</p><p class="mb-3">Ab aliquid architecto atque aut corporis dignissimos, dolor dolorem doloremque eveniet exercitationem facere, magni mollitia nulla quo sed similique soluta tenetur totam ut, vero. Ex iste odit optio possimus quasi repellat ullam.</p>
-                                            </div>
+            detailRow.className = 'hidden detailRow';
+            cell.className = "px-6 py-4 text-sm text-gray-500 text-left tableCell mod-detailRow"
+            cell.colSpan = 7;
+            cell.innerHTML = `
+                <div class="bg-white max-w-7xl">
+                    <div class="grid md:grid-cols-5 grid-cols-1 md:gap-6 gap-0 py-4">
+                        <div class="md:col-span-1">
+                            <h2 class="text-lg font-medium">Lorem Ipsum Dolor</h2></div>
+                            <div class="mt-5 md:mt-0 md:col-span-4">
+                                <div class="grid grid-cols-6 gap-1">
+                                    <div class="flex flex-col col-span-6 gap-1">
+                                        <div>
+                                            <p class="mb-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A adipisci aliquam assumenda consectetur cupiditate doloremque, eaque error, ex impedit magnam nemo perspiciatis praesentium quaerat quia quibusdam quidem quod repellendus, tenetur totam ut.</p><p class="mb-3">Ab accusamus ad amet, consectetur culpa dolores esse excepturi fuga illum, ipsam laudantium, magni nesciunt odit officiis omnis placeat possimus qui quia quo rem! Debitis dolore inventore iste obcaecati quisquam. Perspiciatis, rerum?</p><p class="mb-3">Autem commodi cum, cumque dignissimos dolore ea id illo illum ipsa itaque, laudantium nam numquam officiis pariatur provident qui reprehenderit totam velit veniam voluptatem? Laboriosam nobis, officia perspiciatis quas soluta tempore ullam?</p><p class="mb-3">Ab aliquid architecto atque aut corporis dignissimos, dolor dolorem doloremque eveniet exercitationem facere, magni mollitia nulla quo sed similique soluta tenetur totam ut, vero. Ex iste odit optio possimus quasi repellat ullam.</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <hr>
-                        <div class="grid md:grid-cols-5 grid-cols-1 md:gap-6 gap-0 py-4 pt-8">
-                            <div class="md:col-span-1">
-                                <h2 class="text-lg font-medium">Lorem Ipsum Dolor</h2></div>
-                                <div class="mt-5 md:mt-0 md:col-span-4">
-                                    <div class="grid grid-cols-6 gap-1">
-                                        <div class="flex flex-col col-span-6 gap-1">
-                                            <div>
-                                                <table class="min-w-full divide-y divide-gray-200">
-                                                    <thead class="bg-gray-50 divide-y divide-gray-200 sticky top-0" style="z-index:200">
-                                                    <tr>
-                                                        <th class="whitespace-nowrap px-6 py-3 text-xs font-medium text-gray-600 text-left bg-gray-50 table-head mod-expandable mod-sortable mod-filterable">Header</th>
-                                                        <th class="whitespace-nowrap px-6 py-3 text-xs font-medium text-gray-600 text-left bg-gray-50 table-head mod-expandable mod-sortable mod-filterable">Header</th>
-                                                        <th class="whitespace-nowrap px-6 py-3 text-xs font-medium text-gray-600 text-left bg-gray-50 table-head mod-expandable mod-sortable mod-filterable">Header</th>
-                                                        <th class="whitespace-nowrap px-6 py-3 text-xs font-medium text-gray-600 text-left bg-gray-50 table-head mod-expandable mod-sortable mod-filterable">Header</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody class="bg-white">
-                                                    <tr>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                        <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <div class="text-right p-1 mt-8">
-                        <button class="inline-flex items-center border border-transparent disabled:opacity-50 px-3 py-2 text-sm leading-4 font-medium rounded-md shadow-sm text-purple-600 bg-gray-50 hover:bg-gray-200">Action</button>
-                        <button class="inline-flex items-center border border-transparent disabled:opacity-50 px-3 py-2 text-sm leading-4 font-medium rounded-md shadow-sm text-purple-600 bg-gray-50 hover:bg-gray-200">Action</button>
-                        <button class="inline-flex items-center border border-transparent disabled:opacity-50 px-3 py-2 text-sm leading-4 font-medium rounded-md shadow-sm text-purple-600 bg-gray-50 hover:bg-gray-200">Action</button>
                     </div>
-                    `;
-                detailRow.appendChild( cell )
-                this.table.querySelector( 'tbody' ).appendChild(detailRow);
-            })
+                    <hr>
+                    <div class="grid md:grid-cols-5 grid-cols-1 md:gap-6 gap-0 py-4 pt-8">
+                        <div class="md:col-span-1">
+                            <h2 class="text-lg font-medium">Lorem Ipsum Dolor</h2></div>
+                            <div class="mt-5 md:mt-0 md:col-span-4">
+                                <div class="grid grid-cols-6 gap-1">
+                                    <div class="flex flex-col col-span-6 gap-1">
+                                        <div>
+                                            <table class="min-w-full divide-y divide-gray-200">
+                                                <thead class="bg-gray-50 divide-y divide-gray-200 sticky top-0" style="z-index:200">
+                                                <tr>
+                                                    <th class="whitespace-nowrap px-6 py-3 text-xs font-medium text-gray-600 text-left bg-gray-50 table-head mod-expandable mod-sortable mod-filterable">Header</th>
+                                                    <th class="whitespace-nowrap px-6 py-3 text-xs font-medium text-gray-600 text-left bg-gray-50 table-head mod-expandable mod-sortable mod-filterable">Header</th>
+                                                    <th class="whitespace-nowrap px-6 py-3 text-xs font-medium text-gray-600 text-left bg-gray-50 table-head mod-expandable mod-sortable mod-filterable">Header</th>
+                                                    <th class="whitespace-nowrap px-6 py-3 text-xs font-medium text-gray-600 text-left bg-gray-50 table-head mod-expandable mod-sortable mod-filterable">Header</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody class="bg-white">
+                                                <tr>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 text-left border-b border-gray-200">Data</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <div class="text-right p-1 mt-8">
+                    <button class="inline-flex items-center border border-transparent disabled:opacity-50 px-3 py-2 text-sm leading-4 font-medium rounded-md shadow-sm text-purple-600 bg-gray-50 hover:bg-gray-200">Action</button>
+                    <button class="inline-flex items-center border border-transparent disabled:opacity-50 px-3 py-2 text-sm leading-4 font-medium rounded-md shadow-sm text-purple-600 bg-gray-50 hover:bg-gray-200">Action</button>
+                    <button class="inline-flex items-center border border-transparent disabled:opacity-50 px-3 py-2 text-sm leading-4 font-medium rounded-md shadow-sm text-purple-600 bg-gray-50 hover:bg-gray-200">Action</button>
+                </div>
+                `;
+            detailRow.appendChild( cell )
+            this.table.querySelector( 'tbody' ).appendChild(detailRow);
 
             row.addEventListener( 'click', ( ) => {
                 if ( row.classList.contains( 'expanded' ) ) {
@@ -752,14 +750,14 @@ class TableIt {
                     row.nextElementSibling.classList.remove('expanded');
                     row.nextElementSibling.classList.add('hidden');
                 } else {
-                    document.querySelectorAll( '.dataRow' ).forEach( ( dataRow ) => {
-                        dataRow.classList.remove( 'expanded' );
-                        dataRow.querySelector('.mod-expander').classList.remove( 'is-open' );
-                    } );
-                    document.querySelectorAll( '.detailRow' ).forEach( ( detailRow ) => {
-                        detailRow.classList.remove( 'expanded' );
-                        detailRow.classList.add( 'hidden' );
-                    } );
+                    // document.querySelectorAll( '.dataRow' ).forEach( ( dataRow ) => {
+                    //     dataRow.classList.remove( 'expanded' );
+                    //     dataRow.querySelector('.mod-expander').classList.remove( 'is-open' );
+                    // } );
+                    // document.querySelectorAll( '.detailRow' ).forEach( ( detailRow ) => {
+                    //     detailRow.classList.remove( 'expanded' );
+                    //     detailRow.classList.add( 'hidden' );
+                    // } );
 
                     row.classList.add( 'expanded' );
                     row.querySelector( '.mod-expander').classList.add('is-open');
