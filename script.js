@@ -254,7 +254,11 @@ class TableIt {
         this.data = data;
         this.table = document.getElementById( selector );
         this.dateFormat = new RegExp( '[0-9]+ [A-Za-z]+ [0-9]+ [0-9]+:[0-9]+' );
-        this.filters = [];
+        this.filters = {
+            'creator': [],
+            'status': []
+        };
+        this.filtered = [];
         this.tableStyle = tableStyle;
         this.buildTableHeaders();
         this.buildTable();
@@ -333,13 +337,14 @@ class TableIt {
         let popup;
         let runFilter;
 
+        // Create the dropdown element to select the creator
         if ( column.toLowerCase() === 'name / created by' ) {
             let people = [];
 
             this.data.data.forEach( ( row ) => {
 
-                if ( !people.includes( row.data.creator ) ) {
-                    people.push( row.data.creator );
+                if ( !people.includes( row.creator ) ) {
+                    people.push( row.creator );
                 }
             } );
 
@@ -352,8 +357,8 @@ class TableIt {
         } else if ( column.toLowerCase() === 'status' ) {
             let statuses = [];
             this.data.data.forEach( ( row ) => {
-                if ( !statuses.includes( row.data.status ) ) {
-                    statuses.push( row.data.status );
+                if ( !statuses.includes( row.status ) ) {
+                    statuses.push( row.status );
                 }
             } );
             popup = filterOverlay( 'select', 'Status', statuses.sort() )
@@ -382,8 +387,8 @@ class TableIt {
             if ( runFilter ) {
                 for ( let _data of formData ) {
                     if ( _data[1].toLowerCase() !== 'select an option' ) {
-                        this.filters[_data[0]] = _data[1]
-
+                        this.filters[_data[0]].push(_data[1])
+                        console.log(this.filters)
                         let columnName = _data[0];
                         if ( _data[0] === 'creator' ) {
                             columnName = 'Created By';
@@ -399,7 +404,11 @@ class TableIt {
                             // remove the filter pill and the filter
                             let parent = document.getElementById( 'filterContainer' );
                             parent.querySelector( `li[data-filter="${_data[1].toString()}"]` ).remove();
-                            delete this.filters[_data[0]];
+
+                            const index = this.filters[_data[0]].indexOf(_data[1]);
+                            if (index > -1) {
+                                this.filters[_data[0]].splice(index, 1);
+                            }
 
                             if ( Object.keys(this.filters).length > 0 ) {
                                 this.buildTable(true);
@@ -441,8 +450,8 @@ class TableIt {
             }
 
             for( let i=0; i<this.data.data.length; i++ ) {
-                for ( let key in this.data.data[i]['data'] ) {
-                    if ( this.data.data[i]['data'][key].toString().toLowerCase().indexOf(searchValue) !== -1 ) {
+                for ( let key in this.data.data[i] ) {
+                    if ( this.data.data[i][key].toString().toLowerCase().indexOf(searchValue) !== -1 ) {
                         results.push(this.data.data[i]);
                     }
                 }
@@ -478,6 +487,7 @@ class TableIt {
     }
 
     buildTable( filters ) {
+
         this.table.querySelectorAll('tbody tr').forEach( ( tr ) => {
             tr.remove();
         })
@@ -493,36 +503,25 @@ class TableIt {
                 } );
             }
         } else {
-            let filtered = []
-            let filter = this.filters
+            let filter = {}
+
+            Object.keys(this.filters).forEach( ( _f ) => {
+                if ( this.filters[ _f ].length > 0 ) {
+                    filter[_f] = this.filters[_f];
+                }
+            } );
+
+            const applyFilter = (data, filter) => data.filter(obj =>
+                Object.entries(filter).every(([prop, find]) => find.includes(obj[prop]))
+            );
 
             if ( this.searchResults ) {
-
-                filtered = this.searchResults.filter( ( item ) => {
-                    for ( const key in filter ) {
-
-                        if ( item.data[key] === undefined || item.data[key] !== filter[key] ) {
-                            return false;
-                        }
-                    }
-                    return true;
-                } );
-
+                this.filtered = applyFilter( this.searchResults, filter )
             } else {
-                filtered = this.data.data.filter( ( item ) => {
-                    for ( const key in filter ) {
-
-                        if ( item.data[key] === undefined || item.data[key] !== filter[key] ) {
-                            return false;
-                        }
-                    }
-                    return true;
-                } );
-
+                this.filtered = applyFilter( this.data.data, filter )
             }
 
-
-            filtered.forEach( ( set, idx ) => {
+            this.filtered.forEach( ( set, idx ) => {
                 this.buildTableRow( set, idx );
             } );
         }
@@ -591,12 +590,12 @@ class TableIt {
         let row = document.createElement( 'tr' );
         row.className = 'dataRow'
 
-        Object.keys(set.data).forEach( ( item, idx ) => {
+        Object.keys(set).forEach( ( item, idx ) => {
 
             // Create the cell item, and prefill with default data
             let cell = document.createElement( 'td' );
             cell.className = "px-6 py-4 text-sm text-gray-500 text-left tableCell"
-            cell.innerText = set.data[item];
+            cell.innerText = set[item];
             cell.setAttribute( 'scope', 'col')
 
             // Handle the first cell in the row
@@ -606,29 +605,29 @@ class TableIt {
                     cell.classList.add( 'mod-expander' )
                 }
 
-                cell.innerHTML = `<span class="primary text-gray-800">${set.data[item]}</span><span class="text-gray-400 secondary">${set.data.creator}</span>`
+                cell.innerHTML = `<span class="primary text-gray-800">${set[item]}</span><span class="text-gray-400 secondary">${set.creator}</span>`
             }
 
             // This is a "status column," so we need to make status badges
             if ( item === 'status' ) {
                 let state = 'bg-gray-100 text-gray-800';
-                if ( set.data[item].toLowerCase() === 'error') {
+                if ( set[item].toLowerCase() === 'error') {
                     state = 'bg-red-100 text-red-800'
-                } else if ( set.data[item].toLowerCase() === 'configuring') {
+                } else if ( set[item].toLowerCase() === 'configuring') {
                     state = 'bg-yellow-100 text-yellow-800'
-                } else if ( set.data[item].toLowerCase() === 'success' || set.data[item].toLowerCase() === 'completed' ) {
+                } else if ( set[item].toLowerCase() === 'success' || set[item].toLowerCase() === 'completed' ) {
                     state = 'bg-green-100 text-green-800';
                 }
-                cell.innerHTML = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${state}">${set.data[item]}</span>`;
+                cell.innerHTML = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${state}">${set[item]}</span>`;
             }
 
             // Integers or Floats should alight right
-            if ( Number.isInteger( set.data[item] ) ) {
+            if ( Number.isInteger( set[item] ) ) {
                 cell.classList.remove( "text-left" );
                 cell.classList.add( "text-right" );
             } else if ( item === 'next_transfer' || item === 'last_transfer' ) {
-                if ( set.data[item] !== '-') {
-                    let date = new Date(set.data[item])
+                if ( set[item] !== '-') {
+                    let date = new Date(set[item])
                     let formattedDate = `${date.getDate()} ${monthStrings[ date.getMonth() ]} ${date.getFullYear()}`;
                     let fomattedTime = `${date.getHours()}:${date.getMinutes()}`;
                     cell.innerHTML = `<span class="dateCell mod-date">${formattedDate}</span><span class="dateCell mod-time text-gray-400">${fomattedTime}</span>`;
@@ -636,7 +635,7 @@ class TableIt {
             }
 
             // Handle the last cell in the row
-            if ( idx === Object.keys(set.data).length - 1 ) {
+            if ( idx === Object.keys(set).length - 1 ) {
                 cell.style.textAlign = 'right';
                 cell.style.whiteSpace = 'nowrap'
                 cell.innerHTML = "<a href='#' class='text-purple-800 px-2'>Edit</a><button class='overflowMenu fa-solid fa-ellipsis-vertical'></button>"

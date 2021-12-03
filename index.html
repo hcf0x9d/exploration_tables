@@ -155,13 +155,149 @@
 </body>
 <script src="script.js"></script>
 <script>
+    // let table = {
+    //     headers: [
+    //         ["Name / Created By", 250], ["ID"], ["Status"], ["Next Transfer"], ["Last Transfer"], ["Count"], [""]
+    //     ],
+    //     data: [
+    //         {
+    //             data: {
+    //                 name: "Maroon Iron Chow Chow",
+    //                 creator: "John Medeski",
+    //                 id: "10",
+    //                 status: "Completed",
+    //                 next_transfer: "30 Oct 2021 11:25",
+    //                 last_transfer: "-",
+    //                 count: 100,
+    //                 actions: "",
+    //             },
+    //             detail: ["These are my details for row 1"]
+    //         },
+    //         {
+    //             data: {
+    //                 name: "Aqua Gold Sheepdog",
+    //                 creator: "Billy Martin",
+    //                 id: "09",
+    //                 status: "Error",
+    //                 next_transfer: "29 Oct 2021 15:30",
+    //                 last_transfer: "-",
+    //                 count: 30,
+    //                 actions: "",
+    //             },
+    //             detail: ["These are my details for row 1"]
+    //         },
+    //         {
+    //             data: {
+    //                 name: "Aqua Zinc Cocker Spaniel",
+    //                 creator: "Chris Wood",
+    //                 id: "08",
+    //                 status: "Completed",
+    //                 next_transfer: "12 Oct 2021 16:42",
+    //                 last_transfer: "-",
+    //                 count: 55,
+    //                 actions: "",
+    //             },
+    //             detail: ["These are my details for row 1"]
+    //         },
+    //         {
+    //             data: {
+    //                 name: "Silver Copper Spaniel",
+    //                 creator: "Chris Wood",
+    //                 id: "07",
+    //                 status: "Ready",
+    //                 next_transfer: "11 Oct 2021 09:03",
+    //                 last_transfer: "-",
+    //                 count: 1,
+    //                 actions: "",
+    //             },
+    //             detail: ["These are my details for row 1"]
+    //         },
+    //         {
+    //             data: {
+    //                 name: "Fuschia Silver Corgi",
+    //                 creator: "John Medeski",
+    //                 id: "06",
+    //                 status: "Configuring",
+    //                 next_transfer: "09 Oct 2021 16:21",
+    //                 last_transfer: "-",
+    //                 count: 12,
+    //                 actions: "",
+    //             },
+    //             detail: ["These are my details for row 1"]
+    //         },
+    //         {
+    //             data: {
+    //                 name: "Gray Tin Pomeranian",
+    //                 creator: "John Medeski",
+    //                 id: "05",
+    //                 status: "Completed",
+    //                 next_transfer: "04 Oct 2021 10:15",
+    //                 last_transfer: "-",
+    //                 count: 48,
+    //                 actions: "",
+    //             },
+    //             detail: ["These are my details for row 1"]
+    //         },
+    //         {
+    //             data: {
+    //                 name: "Bitter Volunteer",
+    //                 creator: "Billy Martin",
+    //                 id: "04",
+    //                 status: "Ready",
+    //                 next_transfer: "04 Oct 2021 09:55",
+    //                 last_transfer: "-",
+    //                 count: 48,
+    //                 actions: "",
+    //             },
+    //             detail: ["These are my details for row 1"]
+    //         },
+    //         {
+    //             data: {
+    //                 name: "Eager Pirate",
+    //                 creator: "John Medeski",
+    //                 id: "03",
+    //                 status: "Completed",
+    //                 next_transfer: "02 Oct 2021 11:56",
+    //                 last_transfer: "-",
+    //                 count: 25,
+    //                 actions: "",
+    //             },
+    //             detail: ["These are my details for row 1"]
+    //         },
+    //         {
+    //             data: {
+    //                 name: "Tinted Mamba",
+    //                 creator: "Chris Wood",
+    //                 id: "02",
+    //                 status: "Completed",
+    //                 next_transfer: "01 Oct 2021 12:12",
+    //                 last_transfer: "-",
+    //                 count: 365,
+    //                 actions: "",
+    //             },
+    //             detail: ["These are my details for row 1"]
+    //         },
+    //         {
+    //             data: {
+    //                 name: "Major Dragonfly",
+    //                 creator: "Chris Wood",
+    //                 id: "01",
+    //                 status: "Ready",
+    //                 next_transfer: "01 Oct 2021 15:30",
+    //                 last_transfer: "-",
+    //                 count: 2,
+    //                 actions: "",
+    //             },
+    //             detail: ["These are my details for row 1"]
+    //         },
+    //     ],
+    // };
     let table = {
         headers: [
             ["Name / Created By", 250], ["ID"], ["Status"], ["Next Transfer"], ["Last Transfer"], ["Count"], [""]
         ],
         data: [
             {
-                data: {
                     name: "Maroon Iron Chow Chow",
                     creator: "John Medeski",
                     id: "10",
@@ -170,11 +306,9 @@
                     last_transfer: "-",
                     count: 100,
                     actions: "",
-                },
-                detail: ["These are my details for row 1"]
+
             },
             {
-                data: {
                     name: "Aqua Gold Sheepdog",
                     creator: "Billy Martin",
                     id: "09",
@@ -183,11 +317,9 @@
                     last_transfer: "-",
                     count: 30,
                     actions: "",
-                },
-                detail: ["These are my details for row 1"]
+
             },
             {
-                data: {
                     name: "Aqua Zinc Cocker Spaniel",
                     creator: "Chris Wood",
                     id: "08",
@@ -196,11 +328,8 @@
                     last_transfer: "-",
                     count: 55,
                     actions: "",
-                },
-                detail: ["These are my details for row 1"]
             },
             {
-                data: {
                     name: "Silver Copper Spaniel",
                     creator: "Chris Wood",
                     id: "07",
@@ -209,12 +338,9 @@
                     last_transfer: "-",
                     count: 1,
                     actions: "",
-                },
-                detail: ["These are my details for row 1"]
             },
             {
-                data: {
-                    name: "Fuschia Silver Corgi",
+                name: "Fuschia Silver Corgi",
                     creator: "John Medeski",
                     id: "06",
                     status: "Configuring",
@@ -222,11 +348,9 @@
                     last_transfer: "-",
                     count: 12,
                     actions: "",
-                },
-                detail: ["These are my details for row 1"]
+
             },
             {
-                data: {
                     name: "Gray Tin Pomeranian",
                     creator: "John Medeski",
                     id: "05",
@@ -235,11 +359,8 @@
                     last_transfer: "-",
                     count: 48,
                     actions: "",
-                },
-                detail: ["These are my details for row 1"]
             },
             {
-                data: {
                     name: "Bitter Volunteer",
                     creator: "Billy Martin",
                     id: "04",
@@ -249,10 +370,7 @@
                     count: 48,
                     actions: "",
                 },
-                detail: ["These are my details for row 1"]
-            },
             {
-                data: {
                     name: "Eager Pirate",
                     creator: "John Medeski",
                     id: "03",
@@ -261,11 +379,8 @@
                     last_transfer: "-",
                     count: 25,
                     actions: "",
-                },
-                detail: ["These are my details for row 1"]
             },
             {
-                data: {
                     name: "Tinted Mamba",
                     creator: "Chris Wood",
                     id: "02",
@@ -274,11 +389,8 @@
                     last_transfer: "-",
                     count: 365,
                     actions: "",
-                },
-                detail: ["These are my details for row 1"]
             },
             {
-                data: {
                     name: "Major Dragonfly",
                     creator: "Chris Wood",
                     id: "01",
@@ -287,8 +399,6 @@
                     last_transfer: "-",
                     count: 2,
                     actions: "",
-                },
-                detail: ["These are my details for row 1"]
             },
         ],
     };
