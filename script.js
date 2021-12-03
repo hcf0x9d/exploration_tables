@@ -275,8 +275,8 @@ class TableIt {
 
                 if ( type === 'string' ) {
 
-                    let strA = a['data'][columnSlug].toLowerCase();
-                    let strB = b['data'][columnSlug].toLowerCase();
+                    let strA = a[columnSlug].toLowerCase();
+                    let strB = b[columnSlug].toLowerCase();
 
                     if ( direction === 'dsc' ) {
 
@@ -301,14 +301,14 @@ class TableIt {
                 }
                 else if ( type === 'integer' ) {
                     if ( direction === 'dsc' ) {
-                        return a['data'][columnSlug] - b['data'][columnSlug]
+                        return a[columnSlug] - b[columnSlug]
                     } else {
-                        return b['data'][columnSlug] - a['data'][columnSlug]
+                        return b[columnSlug] - a[columnSlug]
                     }
                 }
                 else if ( type === 'date' ) {
-                    let dateA = new Date(a['data'][columnSlug])
-                    let dateB = new Date(b['data'][columnSlug])
+                    let dateA = new Date(a[columnSlug])
+                    let dateB = new Date(b[columnSlug])
                     if ( direction === 'dsc' ) {
                         return dateB - dateA
                     } else {
@@ -320,9 +320,9 @@ class TableIt {
             this.buildTable();
         }
 
-        if ( typeof this.data.data[0]['data'][columnSlug] === 'string') {
+        if ( typeof this.data.data[0][columnSlug] === 'string') {
 
-            if ( this.dateFormat.test(this.data.data[0]['data'][columnSlug]) ) {
+            if ( this.dateFormat.test(this.data.data[0][columnSlug]) ) {
                 sorter( 'date', direction);
             } else {
                 sorter( 'string', direction);
