@@ -6,7 +6,9 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.16/tailwind.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
+          integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <title>Table</title>
 
     <style>
@@ -18,36 +20,41 @@
         th.sticky::after {
             position: absolute;
             height: 100%;
-            border-right: 1px solid rgba(229,231,235);;
+            border-right: 1px solid rgba(229, 231, 235);;
             content: "";
             right: 0;
-            top:0;
+            top: 0;
         }
 
         td.sticky::after {
             position: absolute;
             height: 100%;
-            border-right: 1px solid rgba(229,231,235);;
+            border-right: 1px solid rgba(229, 231, 235);;
             content: "";
             right: 0;
-            top:0;
+            top: 0;
         }
+
         .tableCell {
             border-top: 1px solid #E5E7EB;
         }
+
         .dateCell.mod-date {
             display: block;
         }
+
         .dateCell.mod-time {
             display: block;
 
         }
+
         .sortSet-button.is-active {
             color: #6D28D9 !important;
         }
+
         tr:hover > td {
             --tw-bg-opacity: 1;
-            background-color: rgba(249,250,251,var(--tw-bg-opacity));
+            background-color: rgba(249, 250, 251, var(--tw-bg-opacity));
             cursor: pointer;
         }
 
@@ -56,15 +63,17 @@
             flex-direction: column;
             padding: 0 5px
         }
-            .filterSet-button, .sortSet-button {
-                /*color: #ccc;*/
-                height: auto;
-            }
+
+        .filterSet-button, .sortSet-button {
+            /*color: #ccc;*/
+            height: auto;
+        }
 
         .tableCell.mod-expander {
             position: relative;
             padding-left: 2.65rem;
         }
+
         .tableCell.mod-expander::before {
             content: "\f105";
             font-family: "Font Awesome 6 Free";
@@ -75,14 +84,16 @@
             transform: translateY(-50%);
             transition: all 0.25s ease;
         }
-            .tableCell.mod-expander.is-open::before {
-                transform: translateY(-50%) rotate( 90deg );
-            }
+
+        .tableCell.mod-expander.is-open::before {
+            transform: translateY(-50%) rotate(90deg);
+        }
 
         .tableCell .primary {
             display: block;
             font-weight: 600;
         }
+
         .tableCell .secondary {
             display: block;
         }
@@ -91,34 +102,43 @@
             border-top: none;
             padding-top: 10px;
         }
+
         tr.expanded .tableCell {
             border-top: 1px solid #9CA3AF;
             /*background: #fff !important;*/
         }
-            tr.expanded .tableCell:first-child {
-                border-left: 1px solid #9CA3AF;
-            }
-            tr.expanded .tableCell:last-child {
-                border-right: 1px solid #9CA3AF;
-            }
+
+        tr.expanded .tableCell:first-child {
+            border-left: 1px solid #9CA3AF;
+        }
+
+        tr.expanded .tableCell:last-child {
+            border-right: 1px solid #9CA3AF;
+        }
+
         tr.detailRow.expanded .tableCell {
             border-bottom: 1px solid #9CA3AF;
             border-top: none !important;
             cursor: default;
         }
-            tr.detailRow .tableCell:hover {
-                background: #fff;
-            }
-            tr.expanded.detailRow .tableCell:first-child {
-                border-left: 1px solid #9CA3AF;
-            }
-            tr.expanded.detailRow .tableCell:last-child {
-                border-right: 1px solid #9CA3AF;
-            }
+
+        tr.detailRow .tableCell:hover {
+            background: #fff;
+        }
+
+        tr.expanded.detailRow .tableCell:first-child {
+            border-left: 1px solid #9CA3AF;
+        }
+
+        tr.expanded.detailRow .tableCell:last-child {
+            border-right: 1px solid #9CA3AF;
+        }
+
         .overflowMenu {
             padding: 5px;
             position: relative;
         }
+
         .filterOverlay::after {
             content: "";
             background: transparent;
@@ -129,23 +149,25 @@
             bottom: -20px;
             z-index: -1;
         }
+
         select {
-            padding:5px;
+            padding: 5px;
         }
     </style>
 
 </head>
-<body style="display: flex;margin-top: 100px;justify-content:center;">
+<body style="display: flex; margin-top:5vh; justify-content:center;">
 <div>
     <div class="pb-3">
         <div class="searchWrap relative">
             <button class="fa-solid fa-magnifying-glass absolute h-full p-2 text-gray-400" id="searchButton"></button>
-            <input type="text" id="searchInput" class="py-1 px-2 pl-8 border rounded w-2/5" placeholder="Search for name, creator, ID, or status...">
+            <input type="text" id="searchInput" class="py-1 px-2 pl-8 border rounded w-2/5"
+                   placeholder="Search for name, creator, ID, or status...">
         </div>
     </div>
     <ul class="filterBadges pb-3" id="filterContainer">
     </ul>
-    <div style="width:1120px; height: 600px;" class="overflow-y-scroll px-1">
+    <div style="width:1120px; height: 80vh;" class="overflow-y-scroll px-1">
         <table id="table" class="min-w-full divide-y divide-gray-200 table-fixed">
             <thead class="bg-gray-50 divide-y divide-gray-200 sticky top-0" style="z-index: 1;"></thead>
             <tbody class="bg-white"></tbody>
@@ -155,255 +177,355 @@
 </body>
 <script src="script.js"></script>
 <script>
-    // let table = {
-    //     headers: [
-    //         ["Name / Created By", 250], ["ID"], ["Status"], ["Next Transfer"], ["Last Transfer"], ["Count"], [""]
-    //     ],
-    //     data: [
-    //         {
-    //             data: {
-    //                 name: "Maroon Iron Chow Chow",
-    //                 creator: "John Medeski",
-    //                 id: "10",
-    //                 status: "Completed",
-    //                 next_transfer: "30 Oct 2021 11:25",
-    //                 last_transfer: "-",
-    //                 count: 100,
-    //                 actions: "",
-    //             },
-    //             detail: ["These are my details for row 1"]
-    //         },
-    //         {
-    //             data: {
-    //                 name: "Aqua Gold Sheepdog",
-    //                 creator: "Billy Martin",
-    //                 id: "09",
-    //                 status: "Error",
-    //                 next_transfer: "29 Oct 2021 15:30",
-    //                 last_transfer: "-",
-    //                 count: 30,
-    //                 actions: "",
-    //             },
-    //             detail: ["These are my details for row 1"]
-    //         },
-    //         {
-    //             data: {
-    //                 name: "Aqua Zinc Cocker Spaniel",
-    //                 creator: "Chris Wood",
-    //                 id: "08",
-    //                 status: "Completed",
-    //                 next_transfer: "12 Oct 2021 16:42",
-    //                 last_transfer: "-",
-    //                 count: 55,
-    //                 actions: "",
-    //             },
-    //             detail: ["These are my details for row 1"]
-    //         },
-    //         {
-    //             data: {
-    //                 name: "Silver Copper Spaniel",
-    //                 creator: "Chris Wood",
-    //                 id: "07",
-    //                 status: "Ready",
-    //                 next_transfer: "11 Oct 2021 09:03",
-    //                 last_transfer: "-",
-    //                 count: 1,
-    //                 actions: "",
-    //             },
-    //             detail: ["These are my details for row 1"]
-    //         },
-    //         {
-    //             data: {
-    //                 name: "Fuschia Silver Corgi",
-    //                 creator: "John Medeski",
-    //                 id: "06",
-    //                 status: "Configuring",
-    //                 next_transfer: "09 Oct 2021 16:21",
-    //                 last_transfer: "-",
-    //                 count: 12,
-    //                 actions: "",
-    //             },
-    //             detail: ["These are my details for row 1"]
-    //         },
-    //         {
-    //             data: {
-    //                 name: "Gray Tin Pomeranian",
-    //                 creator: "John Medeski",
-    //                 id: "05",
-    //                 status: "Completed",
-    //                 next_transfer: "04 Oct 2021 10:15",
-    //                 last_transfer: "-",
-    //                 count: 48,
-    //                 actions: "",
-    //             },
-    //             detail: ["These are my details for row 1"]
-    //         },
-    //         {
-    //             data: {
-    //                 name: "Bitter Volunteer",
-    //                 creator: "Billy Martin",
-    //                 id: "04",
-    //                 status: "Ready",
-    //                 next_transfer: "04 Oct 2021 09:55",
-    //                 last_transfer: "-",
-    //                 count: 48,
-    //                 actions: "",
-    //             },
-    //             detail: ["These are my details for row 1"]
-    //         },
-    //         {
-    //             data: {
-    //                 name: "Eager Pirate",
-    //                 creator: "John Medeski",
-    //                 id: "03",
-    //                 status: "Completed",
-    //                 next_transfer: "02 Oct 2021 11:56",
-    //                 last_transfer: "-",
-    //                 count: 25,
-    //                 actions: "",
-    //             },
-    //             detail: ["These are my details for row 1"]
-    //         },
-    //         {
-    //             data: {
-    //                 name: "Tinted Mamba",
-    //                 creator: "Chris Wood",
-    //                 id: "02",
-    //                 status: "Completed",
-    //                 next_transfer: "01 Oct 2021 12:12",
-    //                 last_transfer: "-",
-    //                 count: 365,
-    //                 actions: "",
-    //             },
-    //             detail: ["These are my details for row 1"]
-    //         },
-    //         {
-    //             data: {
-    //                 name: "Major Dragonfly",
-    //                 creator: "Chris Wood",
-    //                 id: "01",
-    //                 status: "Ready",
-    //                 next_transfer: "01 Oct 2021 15:30",
-    //                 last_transfer: "-",
-    //                 count: 2,
-    //                 actions: "",
-    //             },
-    //             detail: ["These are my details for row 1"]
-    //         },
-    //     ],
-    // };
-    let table = {
+    const table_anon = {
         headers: [
-            ["Name / Created By", 250], ["ID"], ["Status"], ["Next Transfer"], ["Last Transfer"], ["Count"], [""]
+            {
+                name: "Name / Created By",
+                ui_type: "stacked",
+                filter_type: "select",
+                ui_width: 250
+            },
+            {
+                name: "ID",
+                ui_type: "string",
+                filter_type: "string",
+            },
+            {
+                name: "Status",
+                ui_type: "status",
+                filter_type: "select",
+            },
+            {
+                name: "Created Date",
+                ui_type: "date",
+                filter_type: "date",
+            },
+            {
+                name: "Last Date",
+                ui_type: "date",
+                filter_type: "date",
+            },
+            {
+                name: "Count",
+                ui_type: "integer",
+                filter_type: "integer",
+            },
+            {
+                name: "",
+                ui_type: "empty",
+            },
         ],
         data: [
             {
-                    name: "Maroon Iron Chow Chow",
-                    creator: "John Medeski",
-                    id: "10",
-                    status: "Completed",
-                    next_transfer: "30 Oct 2021 11:25",
-                    last_transfer: "-",
-                    count: 100,
-                    actions: "",
+                name: "Blue Iron Chow Chow",
+                creator: "John Medeski",
+                id: "12",
+                status: "Completed",
+                created_date: "31 Oct 2021 11:32",
+                last_date: "-",
+                count: 99,
+                actions: "",
+                details: "DETAILS"
+            },
+            {
+                name: "Purple Steel Chow Chow",
+                creator: "Chris Wood",
+                id: "11",
+                status: "Completed",
+                created_date: "30 Oct 2021 11:31",
+                last_date: "-",
+                count: 101,
+                actions: "",
+                details: "DETAILS"
+            },
+            {
+                name: "Maroon Iron Chow Chow",
+                creator: "John Medeski",
+                id: "10",
+                status: "Completed",
+                created_date: "30 Oct 2021 11:25",
+                last_date: "-",
+                count: 100,
+                actions: "",
+                details: "DETAILS"
+            },
+            {
+                name: "Aqua Gold Sheepdog",
+                creator: "Billy Martin",
+                id: "09",
+                status: "Error",
+                created_date: "29 Oct 2021 15:30",
+                last_date: "-",
+                count: 30,
+                actions: "",
+                details: "DETAILS"
 
             },
             {
-                    name: "Aqua Gold Sheepdog",
-                    creator: "Billy Martin",
-                    id: "09",
-                    status: "Error",
-                    next_transfer: "29 Oct 2021 15:30",
-                    last_transfer: "-",
-                    count: 30,
-                    actions: "",
+                name: "Aqua Zinc Cocker Spaniel",
+                creator: "Chris Wood",
+                id: "08",
+                status: "Completed",
+                created_date: "12 Oct 2021 16:42",
+                last_date: "-",
+                count: 55,
+                actions: "",
+                details: "DETAILS"
 
             },
             {
-                    name: "Aqua Zinc Cocker Spaniel",
-                    creator: "Chris Wood",
-                    id: "08",
-                    status: "Completed",
-                    next_transfer: "12 Oct 2021 16:42",
-                    last_transfer: "-",
-                    count: 55,
-                    actions: "",
-            },
-            {
-                    name: "Silver Copper Spaniel",
-                    creator: "Chris Wood",
-                    id: "07",
-                    status: "Ready",
-                    next_transfer: "11 Oct 2021 09:03",
-                    last_transfer: "-",
-                    count: 1,
-                    actions: "",
+                name: "Silver Copper Spaniel",
+                creator: "Chris Wood",
+                id: "07",
+                status: "Ready",
+                created_date: "11 Oct 2021 09:03",
+                last_date: "-",
+                count: 1,
+                actions: "",
+                details: "DETAILS"
+
             },
             {
                 name: "Fuschia Silver Corgi",
-                    creator: "John Medeski",
-                    id: "06",
-                    status: "Configuring",
-                    next_transfer: "09 Oct 2021 16:21",
-                    last_transfer: "-",
-                    count: 12,
-                    actions: "",
+                creator: "John Medeski",
+                id: "06",
+                status: "Configuring",
+                created_date: "09 Oct 2021 16:21",
+                last_date: "-",
+                count: 12,
+                actions: "",
+                details: "DETAILS"
 
             },
             {
-                    name: "Gray Tin Pomeranian",
-                    creator: "John Medeski",
-                    id: "05",
-                    status: "Completed",
-                    next_transfer: "04 Oct 2021 10:15",
-                    last_transfer: "-",
-                    count: 48,
-                    actions: "",
+                name: "Gray Tin Pomeranian",
+                creator: "John Medeski",
+                id: "05",
+                status: "Completed",
+                created_date: "04 Oct 2021 10:15",
+                last_date: "-",
+                count: 48,
+                actions: "",
+                details: "DETAILS"
+
             },
             {
-                    name: "Bitter Volunteer",
-                    creator: "Billy Martin",
-                    id: "04",
-                    status: "Ready",
-                    next_transfer: "04 Oct 2021 09:55",
-                    last_transfer: "-",
-                    count: 48,
-                    actions: "",
-                },
-            {
-                    name: "Eager Pirate",
-                    creator: "John Medeski",
-                    id: "03",
-                    status: "Completed",
-                    next_transfer: "02 Oct 2021 11:56",
-                    last_transfer: "-",
-                    count: 25,
-                    actions: "",
+                name: "Bitter Volunteer",
+                creator: "Billy Martin",
+                id: "04",
+                status: "Ready",
+                created_date: "04 Oct 2021 09:55",
+                last_date: "-",
+                count: 48,
+                actions: "",
+                details: "DETAILS"
+
             },
             {
-                    name: "Tinted Mamba",
-                    creator: "Chris Wood",
-                    id: "02",
-                    status: "Completed",
-                    next_transfer: "01 Oct 2021 12:12",
-                    last_transfer: "-",
-                    count: 365,
-                    actions: "",
+                name: "Eager Pirate",
+                creator: "John Medeski",
+                id: "03",
+                status: "Completed",
+                created_date: "02 Oct 2021 11:56",
+                last_date: "-",
+                count: 25,
+                actions: "",
+                details: "DETAILS"
+
             },
             {
-                    name: "Major Dragonfly",
-                    creator: "Chris Wood",
-                    id: "01",
-                    status: "Ready",
-                    next_transfer: "01 Oct 2021 15:30",
-                    last_transfer: "-",
-                    count: 2,
-                    actions: "",
+                name: "Tinted Mamba",
+                creator: "Chris Wood",
+                id: "02",
+                status: "Completed",
+                created_date: "01 Oct 2021 12:12",
+                last_date: "-",
+                count: 365,
+                actions: "",
+                details: "DETAILS"
+
+            },
+            {
+                name: "Major Dragonfly",
+                creator: "Chris Wood",
+                id: "01",
+                status: "Ready",
+                created_date: "01 Oct 2021 15:30",
+                last_date: "-",
+                count: 2,
+                actions: "",
+                details: "DETAILS"
+
+            },
+        ],
+    };
+    const table_translations = {
+        headers: [
+            {
+                name: "Name / Created By",
+                ui_type: "stacked",
+                filter_type: "select",
+                ui_width: 250
+            },
+            {
+                name: "Activity",
+                ui_type: "string",
+                filter_type: "select",
+            },
+            {
+                name: "ID",
+                ui_type: "string",
+                filter_type: "string",
+            },
+            {
+                name: "Status",
+                ui_type: "status",
+                filter_type: "select",
+            },
+            {
+                name: "Created Date",
+                ui_type: "date",
+                filter_type: "date",
+            },
+            {
+                name: "",
+                ui_type: "empty",
+            },
+        ],
+        data: [
+            {
+                name: "Blue Iron Chow Chow",
+                creator: "John Medeski",
+                activity: "Import",
+                id: "12",
+                status: "Completed",
+                date: "31 Oct 2021 11:32",
+                actions: "",
+                details: "DETAILS"
+            },
+            {
+                name: "Purple Steel Chow Chow",
+                creator: "Chris Wood",
+                activity: "Export",
+                id: "11",
+                status: "Completed",
+                date: "30 Oct 2021 11:31",
+                actions: "",
+                details: "DETAILS"
+            },
+            {
+                name: "Maroon Iron Chow Chow",
+                creator: "John Medeski",
+                activity: "Export",
+                id: "10",
+                status: "Completed",
+                date: "30 Oct 2021 11:25",
+                actions: "",
+                details: "DETAILS"
+            },
+            {
+                name: "Aqua Gold Sheepdog",
+                creator: "Billy Martin",
+                activity: "Import",
+                id: "09",
+                status: "Error",
+                date: "29 Oct 2021 15:30",
+                actions: "",
+                details: "DETAILS"
+
+            },
+            {
+                name: "Aqua Zinc Cocker Spaniel",
+                creator: "Chris Wood",
+                activity: "Import",
+                id: "08",
+                status: "Completed",
+                date: "12 Oct 2021 16:42",
+                actions: "",
+                details: "DETAILS"
+
+            },
+            {
+                name: "Silver Copper Spaniel",
+                creator: "Chris Wood",
+                activity: "Export",
+                id: "07",
+                status: "Ready",
+                date: "11 Oct 2021 09:03",
+                actions: "",
+                details: "DETAILS"
+
+            },
+            {
+                name: "Fuschia Silver Corgi",
+                creator: "John Medeski",
+                activity: "Export",
+                id: "06",
+                status: "Configuring",
+                date: "09 Oct 2021 16:21",
+                actions: "",
+                details: "DETAILS"
+
+            },
+            {
+                name: "Gray Tin Pomeranian",
+                creator: "John Medeski",
+                activity: "Export",
+                id: "05",
+                status: "Completed",
+                date: "04 Oct 2021 10:15",
+                actions: "",
+                details: "DETAILS"
+
+            },
+            {
+                name: "Bitter Volunteer",
+                creator: "Billy Martin",
+                activity: "Import",
+                id: "04",
+                status: "Ready",
+                date: "04 Oct 2021 09:55",
+                actions: "",
+                details: "DETAILS"
+
+            },
+            {
+                name: "Eager Pirate",
+                creator: "John Medeski",
+                activity: "Import",
+                id: "03",
+                status: "Completed",
+                date: "02 Oct 2021 11:56",
+                actions: "",
+                details: "DETAILS"
+
+            },
+            {
+                name: "Tinted Mamba",
+                creator: "Chris Wood",
+                activity: "Export",
+                id: "02",
+                status: "Completed",
+                date: "01 Oct 2021 12:12",
+                actions: "",
+                details: "DETAILS"
+
+            },
+            {
+                name: "Major Dragonfly",
+                creator: "Chris Wood",
+                activity: "Export",
+                id: "01",
+                status: "Ready",
+                date: "01 Oct 2021 15:30",
+                actions: "",
+                details: "DETAILS"
+
             },
         ],
     };
     const urlParams = new URLSearchParams(window.location.search);
-    const tableStyle = urlParams.get( 'style' );
-    new TableIt( 'table', table, tableStyle );
+    const tableStyle = urlParams.get('style');
+    new TableIt('table', table_anon, tableStyle);
 </script>
 </html>

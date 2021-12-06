@@ -254,21 +254,23 @@ class TableIt {
         this.data = data;
         this.table = document.getElementById( selector );
         this.dateFormat = new RegExp( '[0-9]+ [A-Za-z]+ [0-9]+ [0-9]+:[0-9]+' );
-        this.filters = {
-            'creator': [],
-            'status': []
-        };
+        this.filters = {};
         this.filtered = [];
         this.tableStyle = tableStyle;
         this.buildTableHeaders();
         this.buildTable();
         this.searchData();
 
+        Object.keys(this.data.data[0]).forEach( ( _k ) => {
+            this.filters[_k] = []
+        } )
+
     }
 
     // Sort the columns
     sortData( column, direction ) {
-        let columnSlug = column.split(" ").join("_").toLowerCase()
+
+        let columnSlug = column.name.split(" ").join("_").toLowerCase()
         const sorter = ( type, direction ) => {
 
             this.data.data.sort( function ( a, b ) {
@@ -309,6 +311,7 @@ class TableIt {
                 else if ( type === 'date' ) {
                     let dateA = new Date(a[columnSlug])
                     let dateB = new Date(b[columnSlug])
+                    console.log(a, b)
                     if ( direction === 'dsc' ) {
                         return dateB - dateA
                     } else {
@@ -320,15 +323,12 @@ class TableIt {
             this.buildTable();
         }
 
-        if ( typeof this.data.data[0][columnSlug] === 'string') {
-
-            if ( this.dateFormat.test(this.data.data[0][columnSlug]) ) {
-                sorter( 'date', direction);
-            } else {
-                sorter( 'string', direction);
-            }
+        if ( column.filter_type === 'integer' ) {
+            sorter( 'integer', direction )
+        } else if ( column.filter_type === 'date' ) {
+            sorter( 'date', direction )
         } else {
-            sorter('integer', direction);
+            sorter( 'string', direction );
         }
 
     }
@@ -338,7 +338,7 @@ class TableIt {
         let runFilter;
 
         // Create the dropdown element to select the creator
-        if ( column.toLowerCase() === 'name / created by' ) {
+        if ( column.ui_type === 'stacked' ) {
             let people = [];
 
             this.data.data.forEach( ( row ) => {
@@ -351,30 +351,29 @@ class TableIt {
             popup = filterOverlay( 'select', 'Creator', people.sort() )
             runFilter = true;
 
-        } else if ( column.toLowerCase() === 'id' ) {
+        } else if ( column.filter_type === 'string' ) {
             popup = filterOverlay( 'text', 'id', [])
             runFilter = false;
-        } else if ( column.toLowerCase() === 'status' ) {
-            let statuses = [];
+        } else if ( column.filter_type === 'select' ) {
+            let arr = [];
+            const _k = cell.querySelector( '.filterSet-button' ).dataset.type.toLowerCase();
             this.data.data.forEach( ( row ) => {
-                if ( !statuses.includes( row.status ) ) {
-                    statuses.push( row.status );
+                if ( !arr.includes( row[_k] ) ) {
+                    arr.push( row[_k] );
                 }
             } );
-            popup = filterOverlay( 'select', 'Status', statuses.sort() )
+            popup = filterOverlay( 'select', _k, arr.sort() )
             runFilter = true;
-        } else if ( column.toLowerCase() === 'next transfer' ) {
+        } else if ( column.ui_type === 'date' ) {
             popup = filterOverlay( 'date', 'next transfer', [])
             runFilter = false;
-        } else if ( column.toLowerCase() === 'last transfer' ) {
-            popup = filterOverlay( 'date', 'next transfer', [])
-            runFilter = false;
-        } else if ( column.toLowerCase() === 'count transfer' ) {
+        } else if ( column.ui_type === 'integer' ) {
             popup = filterOverlay( 'number', 'count', [])
             runFilter = false;
         }
 
-        cell.appendChild(popup)
+        cell.appendChild(popup);
+
         popup.querySelector('.js-cancel').addEventListener( 'click', ( e ) => {
             e.preventDefault();
             popup.remove();
@@ -386,13 +385,18 @@ class TableIt {
 
             if ( runFilter ) {
                 for ( let _data of formData ) {
+
+                    // The user has selected something from the dropdown
                     if ( _data[1].toLowerCase() !== 'select an option' ) {
+
+                        // Update the filters object
                         this.filters[_data[0]].push(_data[1])
-                        console.log(this.filters)
                         let columnName = _data[0];
+
                         if ( _data[0] === 'creator' ) {
                             columnName = 'Created By';
                         }
+
                         let li = document.createElement( 'li' );
                         li.dataset.filter = _data[1].toString();
                         li.className = 'filterBadges-badge inline text-xs px-2 py-0.5 bg-gray-200 text-gray-600 rounded mr-2';
@@ -510,7 +514,7 @@ class TableIt {
                     filter[_f] = this.filters[_f];
                 }
             } );
-
+            console.log(filter)
             const applyFilter = (data, filter) => data.filter(obj =>
                 Object.entries(filter).every(([prop, find]) => find.includes(obj[prop]))
             );
@@ -533,45 +537,49 @@ class TableIt {
             let cell = document.createElement( 'th' );
             cell.className = "whitespace-nowrap px-6 py-3 text-xs font-medium text-gray-600 text-left bg-gray-50 table-head mod-expandable mod-sortable mod-filterable"
 
-            if ( header[0] ) {
 
-                if ( idx === 0 ) {
-                    cell.innerHTML = `
-                    <span class="th-inner">
-                        <span class="label">${header[0]}</span>
-                        <span class="filterSet">
-                            <button class="filterSet-button fa-solid fa-filter text-gray-400 hover:text-gray-600" data-type="${header[0]}"></button>
-                        </span>
-                    </span>`;
-                } else {
+            if ( header.ui_type === 'stacked' ) {
+                cell.innerHTML = `
+                <span class="th-inner">
+                    <span class="label">${header.name}</span>
+                    <span class="filterSet">
+                        <button class="filterSet-button fa-solid fa-filter text-gray-400 hover:text-gray-600" data-type="${header.name}"></button>
+                    </span>
+                </span>`;
+            } else {
+                if ( header.name ) {
                     cell.innerHTML = `
                     <span class="th-inner">
                         <span class="sortSet">
                             <button class="sortSet-button mod-asc js-sort fa-solid fa-angle-up text-gray-400 hover:text-gray-600" data-sort="asc"></button>
                             <button class="sortSet-button mod-dsc js-sort fa-solid fa-angle-down text-gray-400 hover:text-gray-600" data-sort="dsc"></button>
                         </span>
-                        <span class="label">${header[0]}</span>
+                        <span class="label">${header.name}</span>
                         <span class="filterSet">
-                            <button class="filterSet-button fa-solid fa-filter text-gray-400 hover:text-gray-600" data-type="${header[0]}"></button>
+                            <button class="filterSet-button fa-solid fa-filter text-gray-400 hover:text-gray-600" data-type="${header.name}"></button>
                         </span>
                     </span>`;
-                }
 
-                cell.querySelector( '.filterSet-button' ).addEventListener( 'click', ( e ) => {
-                    this.filterData( e.target.dataset.type, cell )
-                } )
+                    // User clicks "Filter" for a column
+                    cell.querySelector( '.filterSet-button' ).addEventListener( 'click', ( e ) => {
+                        this.filterData( header, cell )
+                    } )
+
+                    cell.querySelectorAll( '.js-sort' ).forEach( ( sortButton ) => {
+                        sortButton.addEventListener( 'click', () => {
+                            document.querySelectorAll( '.js-sort' ).forEach( ( button ) => {
+                                button.classList.remove( 'is-active' );
+                            });
+                            sortButton.classList.add( 'is-active' );
+
+                            this.sortData( header, sortButton.dataset.sort )
+                        } );
+
+                    });
+                }
             }
 
-            cell.querySelectorAll( '.js-sort' ).forEach( ( sortButton ) => {
-                sortButton.addEventListener( 'click', () => {
-                    document.querySelectorAll( '.js-sort' ).forEach( ( button ) => {
-                        button.classList.remove( 'is-active' );
-                    });
-                    sortButton.classList.add( 'is-active' );
-                    this.sortData( header[0], sortButton.dataset.sort )
-                } );
 
-            });
 
             cell.setAttribute( 'scope', 'col')
 
@@ -586,69 +594,68 @@ class TableIt {
         this.table.querySelector( 'thead' ).appendChild( row );
     }
 
+    buildTableCell( set, item, idx ) {
+        let cell = document.createElement( 'td' );
+        cell.className = "px-6 py-4 text-sm text-gray-500 text-left tableCell"
+        cell.innerText = set[item];
+        cell.setAttribute( 'scope', 'col')
+
+        // Handle the first cell in the row
+        if ( idx === 0 ) {
+
+            if ( this.tableStyle === 'expand' ) {
+                cell.classList.add( 'mod-expander' )
+            }
+            cell.innerHTML = `<span class="primary text-gray-800">${set[item]}</span><span class="text-gray-400 secondary">${set.creator}</span>`
+
+        } else if ( item === 'status' ) {
+            // This is a "status column," so we need to make status badges
+            let state = 'bg-gray-100 text-gray-800';
+            if ( set[item].toLowerCase() === 'error') {
+                state = 'bg-red-100 text-red-800'
+            } else if ( set[item].toLowerCase() === 'configuring') {
+                state = 'bg-yellow-100 text-yellow-800'
+            } else if ( set[item].toLowerCase() === 'success' || set[item].toLowerCase() === 'completed' ) {
+                state = 'bg-green-100 text-green-800';
+            }
+            cell.innerHTML = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${state}">${set[item]}</span>`;
+        }
+        else if ( item === 'count' ) {
+            cell.classList.remove( "text-left" );
+            cell.classList.add( "text-right" );
+        } else if ( this.dateFormat.test( set[item] ) ) {
+            // This is a date
+            let date = new Date(set[item])
+            let formattedDate = `${date.getDate()} ${monthStrings[ date.getMonth() ]} ${date.getFullYear()}`;
+            let fomattedTime = `${date.getHours()}:${date.getMinutes()}`;
+            cell.innerHTML = `<span class="dateCell mod-date">${formattedDate}</span><span class="dateCell mod-time text-gray-400">${fomattedTime}</span>`;
+        }
+        // Handle the last cell in the row
+        if ( idx === Object.keys(set).length - 2 ) {
+            cell.style.textAlign = 'right';
+            cell.style.whiteSpace = 'nowrap'
+            cell.innerHTML = "<a href='#' class='text-purple-800 px-2'>Edit</a><button class='overflowMenu fa-solid fa-ellipsis-vertical'></button>"
+
+            cell.querySelector('a' ).addEventListener( 'click', ( e ) => {
+                e.stopPropagation();
+            } );
+        }
+
+        return cell;
+    }
+
     buildTableRow( set ) {
+
         let row = document.createElement( 'tr' );
         row.className = 'dataRow'
 
         Object.keys(set).forEach( ( item, idx ) => {
 
-            // Create the cell item, and prefill with default data
-            let cell = document.createElement( 'td' );
-            cell.className = "px-6 py-4 text-sm text-gray-500 text-left tableCell"
-            cell.innerText = set[item];
-            cell.setAttribute( 'scope', 'col')
-
-            // Handle the first cell in the row
-            if ( item === 'name' ) {
-
-                if ( this.tableStyle === 'expand' ) {
-                    cell.classList.add( 'mod-expander' )
-                }
-
-                cell.innerHTML = `<span class="primary text-gray-800">${set[item]}</span><span class="text-gray-400 secondary">${set.creator}</span>`
-            }
-
-            // This is a "status column," so we need to make status badges
-            if ( item === 'status' ) {
-                let state = 'bg-gray-100 text-gray-800';
-                if ( set[item].toLowerCase() === 'error') {
-                    state = 'bg-red-100 text-red-800'
-                } else if ( set[item].toLowerCase() === 'configuring') {
-                    state = 'bg-yellow-100 text-yellow-800'
-                } else if ( set[item].toLowerCase() === 'success' || set[item].toLowerCase() === 'completed' ) {
-                    state = 'bg-green-100 text-green-800';
-                }
-                cell.innerHTML = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${state}">${set[item]}</span>`;
-            }
-
-            // Integers or Floats should alight right
-            if ( Number.isInteger( set[item] ) ) {
-                cell.classList.remove( "text-left" );
-                cell.classList.add( "text-right" );
-            } else if ( item === 'next_transfer' || item === 'last_transfer' ) {
-                if ( set[item] !== '-') {
-                    let date = new Date(set[item])
-                    let formattedDate = `${date.getDate()} ${monthStrings[ date.getMonth() ]} ${date.getFullYear()}`;
-                    let fomattedTime = `${date.getHours()}:${date.getMinutes()}`;
-                    cell.innerHTML = `<span class="dateCell mod-date">${formattedDate}</span><span class="dateCell mod-time text-gray-400">${fomattedTime}</span>`;
+            if ( item !== 'details' ) {
+                if ( idx !== 1 ) {
+                    row.appendChild( this.buildTableCell( set, item, idx ) );
                 }
             }
-
-            // Handle the last cell in the row
-            if ( idx === Object.keys(set).length - 1 ) {
-                cell.style.textAlign = 'right';
-                cell.style.whiteSpace = 'nowrap'
-                cell.innerHTML = "<a href='#' class='text-purple-800 px-2'>Edit</a><button class='overflowMenu fa-solid fa-ellipsis-vertical'></button>"
-
-                cell.querySelector('a' ).addEventListener( 'click', ( e ) => {
-                    e.stopPropagation();
-                } );
-            }
-
-            if ( idx !== 1 ) {
-                row.appendChild( cell );
-            }
-
 
         } );
 
@@ -754,14 +761,6 @@ class TableIt {
                     row.nextElementSibling.classList.remove('expanded');
                     row.nextElementSibling.classList.add('hidden');
                 } else {
-                    // document.querySelectorAll( '.dataRow' ).forEach( ( dataRow ) => {
-                    //     dataRow.classList.remove( 'expanded' );
-                    //     dataRow.querySelector('.mod-expander').classList.remove( 'is-open' );
-                    // } );
-                    // document.querySelectorAll( '.detailRow' ).forEach( ( detailRow ) => {
-                    //     detailRow.classList.remove( 'expanded' );
-                    //     detailRow.classList.add( 'hidden' );
-                    // } );
 
                     row.classList.add( 'expanded' );
                     row.querySelector( '.mod-expander').classList.add('is-open');
