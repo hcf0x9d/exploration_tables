@@ -98,8 +98,8 @@ const filterOverlay = ( type, column, data ) => {
 
     overlayHeader.innerHTML = `<h3 class="capitalize">Filter by ${column}</h3>`
     overlayFooter.innerHTML = `
-            <button class="js-cancel inline-flex items-center border border-transparent disabled:opacity-50 px-3 py-2 text-sm leading-4 font-medium rounded-md shadow-sm text-purple-600 bg-gray-50 hover:bg-gray-200">Cancel</button>
-            <button class="js-filter inline-flex items-center border border-transparent disabled:opacity-50 px-3 py-2 text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-800">Add Filter</button>
+<!--            <button class="js-cancel inline-flex items-center border border-transparent disabled:opacity-50 px-3 py-2 text-sm leading-4 font-medium rounded-md shadow-sm text-purple-600 bg-gray-50 hover:bg-gray-200">Cancel</button>-->
+            <button class="js-filter inline-flex items-center border border-transparent disabled:opacity-50 px-3 py-2 text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-800 w-full" style="justify-content:center;">Add Filter</button>
             `;
     overlay.appendChild(overlayHeader);
     overlay.appendChild(overlayInner);
@@ -367,11 +367,6 @@ class TableIt {
 
         cell.appendChild(popup);
 
-        popup.querySelector('.js-cancel').addEventListener( 'click', ( e ) => {
-            e.preventDefault();
-            popup.remove();
-        });
-
         popup.addEventListener( 'submit', ( e ) => {
             e.preventDefault();
             let formData = new FormData(e.target)
@@ -381,6 +376,29 @@ class TableIt {
 
                     // The user has selected something from the dropdown
                     if ( _data[1].toLowerCase() !== 'select an option' ) {
+
+                        let filterContainer = document.getElementById( 'filterContainer' );
+                        let badges = filterContainer.querySelectorAll( '.filterBadges-badge' );
+
+                        if ( badges.length === 0 ) {
+                            let clearAllLi = document.createElement( 'li' );
+                            clearAllLi.className = 'filterBadges-badge-all inline text-xs px-2 py-0.5 bg-white text-purple-700 rounded mr-2 border border-gray-200';
+                            clearAllLi.innerHTML = `<span class="font-bold capitalize">Clear All Filters</span> <button class="fa-solid fa-times pl-1"></button>`;
+                            filterContainer.appendChild(clearAllLi)
+
+                            clearAllLi.querySelector( '.fa-times' ).addEventListener( 'click', () => {
+                                filterContainer.querySelectorAll( '.filterBadges-badge' ).forEach( ( badge ) => {
+                                    const index = this.filters[badge.dataset.key].indexOf(badge.dataset.filter);
+                                    if (index > -1) {
+                                        this.filters[badge.dataset.key].splice(index, 1);
+                                    }
+                                    badge.remove();
+                                } );
+                                this.buildTable(true);
+                                clearAllLi.remove();
+                            } );
+                        }
+
 
                         // Update the filters object
                         this.filters[_data[0]].push(_data[1])
@@ -392,10 +410,11 @@ class TableIt {
 
                         let li = document.createElement( 'li' );
                         li.dataset.filter = _data[1].toString();
-                        li.className = 'filterBadges-badge inline text-xs px-2 py-0.5 bg-gray-200 text-gray-600 rounded mr-2';
+                        li.dataset.key = _data[0].toString();
+                        li.className = 'filterBadges-badge inline text-xs px-2 py-0.5 bg-purple-600 text-white rounded mr-2 border boreder-purple-600';
                         li.innerHTML = `<span class="font-bold capitalize">${columnName}:</span> ${_data[1]} <button class="fa-solid fa-times pl-1"></button>`;
 
-                        document.getElementById( 'filterContainer' ).appendChild( li );
+                        filterContainer.appendChild(li)
 
                         li.querySelector( '.fa-times' ).addEventListener( 'click', () => {
                             // remove the filter pill and the filter
@@ -619,7 +638,7 @@ class TableIt {
             if ( this.tableStyle === 'expand' ) {
                 cell.classList.add( 'mod-expander' )
             }
-            cell.innerHTML = `<span class="primary text-gray-800">${set[item]}</span><span class="text-gray-400 secondary">${set.creator}</span>`
+            cell.innerHTML = `<span class="primary text-purple-800">${set[item]}</span><span class="text-gray-400 secondary">${set.creator}</span>`
 
         } else if ( item === 'status' ) {
             // This is a "status column," so we need to make status badges
