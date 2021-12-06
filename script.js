@@ -305,7 +305,6 @@ class TableIt {
                 else if ( type === 'date' ) {
                     let dateA = new Date(a[columnSlug])
                     let dateB = new Date(b[columnSlug])
-                    console.log(a, b)
                     if ( direction === 'dsc' ) {
                         return dateB - dateA
                     } else {
@@ -330,7 +329,7 @@ class TableIt {
     filterData( column, cell ) {
         let popup;
         let runFilter;
-        console.log(column,cell)
+
         // Create the dropdown element to select the creator
         if ( column.ui_type === 'stacked' ) {
             let people = [];
@@ -436,16 +435,29 @@ class TableIt {
         let search = document.getElementById( 'searchInput' );
         let button = document.getElementById( 'searchButton');
 
+        const clearSet = () => {
+            if ( !document.querySelector( '.searchWrap .clearButton' ) ) {
+                const clearButton = document.createElement( 'button' );
+                clearButton.innerHTML = '';
+                clearButton.className = 'clearButton absolute right-1 p-2 fa-solid fa-times text-gray-400 h-full';
+
+                document.querySelector( '.searchWrap' ).appendChild( clearButton );
+
+                clearButton.addEventListener( 'click', () => {
+                    search.value = '';
+                    this.searchResults = false;
+                    this.buildTable( true );
+                    clearButton.remove();
+                } );
+
+            }
+        }
         const searchIt = () => {
 
             let results = []
             const searchValue = search.value.toLowerCase();
 
-            let oldBadge = document.getElementById( 'filterContainer' ).querySelector( '.search-badge' );
-
-            if ( oldBadge ) {
-                oldBadge.remove();
-            }
+            clearSet();
 
             for( let i=0; i<this.data.data.length; i++ ) {
                 for ( let key in this.data.data[i] ) {
@@ -455,23 +467,25 @@ class TableIt {
                 }
             }
 
+
             this.searchResults = results;
 
-            let li = document.createElement( 'li' );
-            li.className = 'search-badge filterBadges-badge inline text-xs px-2 py-0.5 bg-gray-200 text-gray-600 rounded mr-2';
-            li.innerHTML = `<span class="font-bold capitalize">Search:</span> ${ search.value } <button class="fa-solid fa-times pl-1"></button>`;
-
-            document.getElementById( 'filterContainer' ).appendChild( li );
-            search.value = '';
-            li.querySelector( '.fa-times' ).addEventListener( 'click', () => {
-                // remove the filter pill and the filter
-                li.remove();
-                this.searchResults = false;
-                this.buildTable( true );
-            } );
+            // let li = document.createElement( 'li' );
+            // li.className = 'search-badge filterBadges-badge inline text-xs px-2 py-0.5 bg-gray-200 text-gray-600 rounded mr-2';
+            // li.innerHTML = `<span class="font-bold capitalize">Search:</span> ${ search.value } <button class="fa-solid fa-times pl-1"></button>`;
+            //
+            // document.getElementById( 'filterContainer' ).appendChild( li );
+            // search.value = '';
+            // li.querySelector( '.fa-times' ).addEventListener( 'click', () => {
+            //     // remove the filter pill and the filter
+            //     li.remove();
+            //     this.searchResults = false;
+            //     this.buildTable( true );
+            // } );
 
             this.buildTable( true );
         }
+
 
         button.addEventListener( 'click', () => {
             searchIt();
@@ -508,7 +522,7 @@ class TableIt {
                     filter[_f] = this.filters[_f];
                 }
             } );
-            console.log(filter)
+
             const applyFilter = (data, filter) => data.filter(obj =>
                 Object.entries(filter).every(([prop, find]) => find.includes(obj[prop]))
             );
