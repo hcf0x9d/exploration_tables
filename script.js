@@ -336,7 +336,7 @@ class TableIt {
     filterData( column, cell ) {
         let popup;
         let runFilter;
-
+        console.log(column,cell)
         // Create the dropdown element to select the creator
         if ( column.ui_type === 'stacked' ) {
             let people = [];
@@ -546,6 +546,11 @@ class TableIt {
                         <button class="filterSet-button fa-solid fa-filter text-gray-400 hover:text-gray-600" data-type="${header.name}"></button>
                     </span>
                 </span>`;
+
+                // User clicks "Filter" for a column
+                cell.querySelector( '.filterSet-button' ).addEventListener( 'click', ( e ) => {
+                    this.filterData( header, cell )
+                } )
             } else {
                 if ( header.name ) {
                     cell.innerHTML = `
