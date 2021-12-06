@@ -264,10 +264,12 @@ class TableIt {
     // Sort the columns
     sortData( column, direction ) {
 
-        let columnSlug = column.name.split(" ").join("_").toLowerCase()
+        let columnSlug = column.name.split(" ").join("_").toLowerCase();
+        let data = this.data.data;
+
         const sorter = ( type, direction ) => {
 
-            this.data.data.sort( function ( a, b ) {
+            data.sort( function ( a, b ) {
 
                 if ( type === 'string' ) {
 
@@ -312,8 +314,8 @@ class TableIt {
                     }
                 }
             } );
-
-            this.buildTable();
+            // console.log(this.filtered)
+            this.buildTable(true);
         }
 
         if ( column.filter_type === 'integer' ) {
