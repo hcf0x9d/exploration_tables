@@ -1,9 +1,5 @@
 const monthStrings = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-// const isDate = (date) => {
-//     return ( new Date(date) !== "Invalid Date") && !isNaN( new Date(date) );
-// }
-
 const filterOverlay = ( type, column, data ) => {
     let overlay = document.createElement( 'form' );
     let overlayInner = document.createElement( 'div' );
@@ -138,7 +134,7 @@ class Modal {
         modal.setAttribute( 'role', 'dialog' )
         modal.setAttribute( 'aria-modal', 'true' )
 
-        let html = `
+        modal.innerHTML = `
   <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
     <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" style="" aria-hidden="true"></div>
     <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
@@ -234,9 +230,7 @@ class Modal {
         </button>
       </div>
     </div>
-  </div>`
-
-        modal.innerHTML = html;
+  </div>`;
 
         modal.querySelector( '.js-modal-close' ).addEventListener( 'click', () => {
             modal.remove();
@@ -432,7 +426,7 @@ class TableIt {
 
         } );
 
-        popup.addEventListener( 'mouseleave', ( e ) => {
+        popup.addEventListener( 'mouseleave', () => {
             popup.remove();
         } );
 
@@ -479,7 +473,7 @@ class TableIt {
             this.buildTable( true );
         }
 
-        button.addEventListener( 'click', ( e ) => {
+        button.addEventListener( 'click', () => {
             searchIt();
         } );
 
@@ -533,7 +527,7 @@ class TableIt {
 
     buildTableHeaders() {
         let row = document.createElement( 'tr' );
-        this.data.headers.forEach( ( header, idx ) => {
+        this.data.headers.forEach( ( header) => {
             let cell = document.createElement( 'th' );
             cell.className = "whitespace-nowrap px-6 py-3 text-xs font-medium text-gray-600 text-left bg-gray-50 table-head mod-expandable mod-sortable mod-filterable"
 
@@ -548,7 +542,7 @@ class TableIt {
                 </span>`;
 
                 // User clicks "Filter" for a column
-                cell.querySelector( '.filterSet-button' ).addEventListener( 'click', ( e ) => {
+                cell.querySelector( '.filterSet-button' ).addEventListener( 'click', () => {
                     this.filterData( header, cell )
                 } )
             } else {
@@ -566,7 +560,7 @@ class TableIt {
                     </span>`;
 
                     // User clicks "Filter" for a column
-                    cell.querySelector( '.filterSet-button' ).addEventListener( 'click', ( e ) => {
+                    cell.querySelector( '.filterSet-button' ).addEventListener( 'click', () => {
                         this.filterData( header, cell )
                     } )
 
@@ -632,8 +626,8 @@ class TableIt {
             // This is a date
             let date = new Date(set[item])
             let formattedDate = `${date.getDate()} ${monthStrings[ date.getMonth() ]} ${date.getFullYear()}`;
-            let fomattedTime = `${date.getHours()}:${date.getMinutes()}`;
-            cell.innerHTML = `<span class="dateCell mod-date">${formattedDate}</span><span class="dateCell mod-time text-gray-400">${fomattedTime}</span>`;
+            let formattedTime = `${date.getHours()}:${date.getMinutes()}`;
+            cell.innerHTML = `<span class="dateCell mod-date">${formattedDate}</span><span class="dateCell mod-time text-gray-400">${formattedTime}</span>`;
         }
         // Handle the last cell in the row
         if ( idx === Object.keys(set).length - 2 ) {
