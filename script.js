@@ -314,8 +314,9 @@ class TableIt {
                     }
                 }
             } );
-            // console.log(this.filtered)
+
             this.buildTable(true);
+
         }
 
         if ( column.filter_type === 'integer' ) {
@@ -636,7 +637,7 @@ class TableIt {
 
         // Handle the first cell in the row
         if ( idx === 0 ) {
-
+            cell.style.width = '250px'
             if ( this.tableStyle === 'expand' ) {
                 cell.classList.add( 'mod-expander' )
             }
@@ -808,7 +809,6 @@ class TableIt {
             row.addEventListener( 'click', () => {
                 let modal = new Modal( set );
                 modal.buildModal();
-
             } );
         }
 
