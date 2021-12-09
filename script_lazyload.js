@@ -278,7 +278,7 @@ class TableIt {
             if( element.scrollTop === (element.scrollHeight - element.offsetHeight) && !this.pause) {
                 let loadingRow = document.createElement( 'tr' );
                 loadingRow.id = 'loadingRow'
-                loadingRow.innerHTML = `<td colspan="8" class="text-center py-4">Loading</td>`;
+                loadingRow.innerHTML = `<td colspan="8" class="text-center py-10">Loading</td>`;
                 this.table.appendChild(loadingRow)
                 this.pause = true;
                 this.addNewRows();
